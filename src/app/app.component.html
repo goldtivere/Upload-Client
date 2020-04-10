@@ -1,0 +1,96 @@
+<script src="app-services/table-service.ts"></script>
+<div id="wrapper">
+  <nav class="navbar navbar-fixed-top" *ngIf="authenticationService.sessionUser && !isLoginPage()">
+    <div class="container-fluid">
+      <div class="navbar-btn">
+        <button type="button" class="btn-toggle-offcanvas"><i class="lnr lnr-menu fa fa-bars"></i></button>
+      </div>
+
+      <div class="navbar-brand">
+      </div>
+
+      <!--<div class="navbar-right">-->
+        <!--<div id="navbar-menu">-->
+          <!--<ul class="nav navbar-nav dropdown">-->
+            <!--<a [routerLink]="['/']"><img [src]="getLogo()" style="width: 150px;" alt="Coronation Logo" class="img-responsive logo"></a>-->
+          <!--</ul>-->
+        <!--</div>-->
+      <!--</div>-->
+    </div>
+  </nav>
+
+  <div id="left-sidebar" class="sidebar" *ngIf="authenticationService.sessionUser && !isLoginPage()">
+    <div class="sidebar-scroll">
+      <div class="user-account">
+        <div class="dropdown">
+          <span>Welcome,</span>
+          <a href="javascript:void(0);" class="dropdown-toggle user-name" data-toggle="dropdown">
+            <strong>{{authenticationService.sessionUser?.firstName}} {{authenticationService.sessionUser?.lastName}}</strong></a>
+          <ul class="dropdown-menu dropdown-menu-right account animated flipInY">
+
+            <li><a  (click)="logout()"><i class="icon-power"></i>Logout</a></li>
+          </ul>
+        </div>
+        <hr>
+      </div>
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs">
+        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#hr_menu">Home</a>
+        </li>
+      </ul>
+
+      <!-- Tab panes -->
+      <div class="tab-content p-l-0 p-r-0">
+        <div class="tab-pane animated fadeIn active" id="hr_menu">
+          <nav class="sidebar-nav">
+            <ul class="main-menu metismenu">
+              <li *ngIf="authenticationService.isStaffAdmin()"><a [routerLink]="['/home']" [queryParams]="{page: pageUtils.start, limit: pageUtils.limit}"><i class="icon-settings"></i><span>Company Management</span></a></li>
+              <li *ngIf="authenticationService.isStaffUser()"><a [routerLink]="['/payments']" [queryParams]="{page: pageUtils.start, limit: pageUtils.limit}"><i class="icon-credit-card"></i>Accept Payment</a></li>
+              <li><a  routerLink="" (click)="openModal()"><i class="icon-lock"></i>Change Password</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <router-outlet></router-outlet>
+
+</div>
+<ng-template #passwordModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Change Password</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+
+        <div class="alert alert-danger" *ngIf="error">
+          {{error}}
+        </div>
+        <div class="alert alert-success" *ngIf="success">
+          {{success}}
+        </div>
+        <mat-form-field appearance="standard" matTooltip="Previous Password" style="padding-right: 20px">
+          <input matInput type="password" required formControlName="previousPassword" placeholder="Previous Password">
+        </mat-form-field>
+        <mat-form-field appearance="standard" matTooltip="New Password">
+          <input matInput type="password" required formControlName="newPassword" placeholder="New Password">
+        </mat-form-field>
+        <mat-form-field appearance="standard" matTooltip="Confirm Password">
+          <input matInput type="password" required formControlName="confirmPassword" placeholder="Confirm Password">
+        </mat-form-field>
+        <div class="form-group">
+          <span>Password length should be 6 minimum and contains at least one uppercase, one lowercase and one digit</span>
+        </div>
+        <div class="text-center">
+          <button mat-raised-button color="primary" type="submit" [class.disabled]="passwordForm.invalid">
+            <i class="fa fa-spinner fa-pulse" *ngIf="loading"></i>&nbsp;Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>

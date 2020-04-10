@@ -1,0 +1,112 @@
+.g-enroll-bg{
+  height:200px;
+  background-color: #fff;
+  margin: 25px 10px;
+
+}
+
+.g-enroll-color1{
+  color: #A4e2cA;
+}
+.g-enroll-color1b{
+  color: #15895C;
+}
+.g-enroll-color2{
+  color: #d9b9f7;
+}
+.g-enroll-color2b{
+  color: #7f32cb;
+}
+
+.g-enroll-bg1{
+  background-color: #A4e2cA;
+}
+.g-client-bg{
+  background-color: #D2F1E4;
+}
+.g-quicklink-bg{
+  background-color: #F9F0E7;
+}
+.g-quicklink-head-bg{
+  background-color: #E4bfC0;
+}
+
+.quicklink-header{
+  margin: -30px -41px;
+  padding: 10px 40px;
+}
+
+.quicklink-body{
+  padding: 40px 12px;
+}
+
+.g-enroll-bg2{
+  background-color: #d9b9f7;
+}
+
+.g-enroll-border1{
+  border-radius: 12px;
+  border: 4px solid #A4e2cA;
+  padding: 10px 15px;
+}
+.g-enroll-border2{
+  border-radius: 12px;
+  border: 4px solid #d9b9f7;
+  padding: 10px 15px;
+
+}
+.view-details-link{
+  height: 35px;
+  padding-right: 20px;
+  padding-top: 5px;
+}
+
+.enroll-icon{
+  width: 95%;
+  margin: auto;
+  text-align: center;
+}
+
+@media (max-width: 576px) {
+  .quicklink-header{
+    margin: -30px -16px;
+    padding: 10px 40px;
+  }
+
+  .enroll-icon{
+    width: 20%;
+    margin: auto;
+    text-align: center;
+  }
+
+  .mt-40-xs{
+    margin-top: 40px!important;
+  }
+  .quicklink-body{
+    padding: 40px 40px;
+  }
+
+}
+
+.g-line-height-4{
+  line-height: 4;
+}
+
+.quicklink-body ul{
+  color: #74352B;
+}
+.quicklink-body ul li a:hover{
+  padding-left: 10px;
+}
+
+.mat-form-field {
+  padding-right: 10px;
+}
+
+.cdk-global-overlay-wrapper, .cdk-overlay-container {
+  z-index: 99999 !important;
+}
+
+/deep/.cdk-overlay-container {
+  z-index: 10001 !important;
+}

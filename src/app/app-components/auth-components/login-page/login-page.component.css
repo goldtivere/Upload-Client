@@ -1,0 +1,13 @@
+.login-bg {
+    height: 100%;
+    padding-top: 0;
+    background-image: url(/assets/images/background.jpg) !important;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+}
+
+.container.g-pt-100.g-pb-20 {
+    padding: 60px !important;
+}
+
+.disabled { cursor: not-allowed; }

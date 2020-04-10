@@ -1,0 +1,18 @@
+<h2 mat-dialog-title>Input Token</h2>
+
+<mat-dialog-content [formGroup]="form">
+  <div class="alert alert-danger" *ngIf="error">
+    {{error}}
+  </div>
+  <mat-form-field>
+    <input matInput
+           placeholder="Token"
+           formControlName="token">
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button class="mat-raised-button"(click)="close()">Close</button>
+  <button class="mat-raised-button mat-primary"(click)="validate()">
+      <i class="fa fa-spinner fa-pulse" *ngIf="processing"></i>&nbsp;Validate</button>
+</mat-dialog-actions>

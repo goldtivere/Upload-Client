@@ -1,0 +1,66 @@
+<script src="../../../../protractor.conf.js"></script>
+
+<div id="main-content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-lg-6 col-md-8 col-sm-12">
+          <h2><a [routerLink]="['/home']" class="btn btn-xs btn-link btn-toggle-fullwidth"><i
+            class="fa fa-arrow-left"></i></a> Home</h2>
+          <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a [routerLink]="['/home']"><i class="icon-home"></i></a></li>
+            <li class="breadcrumb-item active"><a>Dashboard</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="row clearfix" *ngIf="user">
+      <div class="col-lg-3 col-md-4">
+        <div class="card top_counter">
+          <div class="body">
+            <a style="color: black;" [routerLink]="" >
+              <div class="icon"><i class="fa fa-send-o"></i> </div>
+              <div class="content">
+                <div class="text">Total Transaction</div>
+                <h5 class="number">100</h5>
+              </div>
+            </a>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-4">
+        <div class="card top_counter">
+          <div class="body">
+            <a style="color: black;" [routerLink]="">
+              <div class="icon"><i class="fa fa-money"></i> </div>
+              <div class="content">
+                <div class="text">Successful Transaction</div>
+                <h5 class="number">100</h5>
+              </div>
+            </a>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-4">
+        <div class="card top_counter">
+          <div class="body">
+            <a style="color: black;" [routerLink]="" >
+              <div class="icon"><i class="fa fa-ban"></i> </div>
+              <div class="content">
+                <div class="text">Failed Transaction</div>
+                <h5 class="number">0</h5>
+              </div>
+            </a>
+
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+

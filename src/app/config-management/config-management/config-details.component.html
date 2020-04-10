@@ -1,0 +1,1049 @@
+<div id="main-content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-lg-6 col-md-8 col-sm-12">
+          <h2><a [routerLink]="['/home']" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a> Uploads</h2>
+          <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a [routerLink]="['/home']"><i class="icon-home"></i></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="row clearfix" *ngIf="user">
+
+
+      <div class="root-inner" style="width: 100%">
+        <div class="card">
+          <div class="card-body p-10">
+            <div class="border-bottom-b1">
+              <h3>Configuration Management</h3>
+            </div>
+
+            <mat-tab-group>
+              <mat-tab label="Manage Accounts">
+                <div id="accounts">
+                  <div class="row">
+                    <div style="width: 100%">
+                      <div class="widget widget-fullwidth widget-small" style="width: 100%">
+
+                        <div class="row">
+                          <div class="col-md-8" *ngIf="authenticationService.hasRole(roleTypes.ADMIN)">
+                            <div style="background: white; padding: 16px" class="mat-elevation-z1 bg-filter">
+                              <div>
+                                <div class="" style="text-align: end; float: right;">
+                                  <a [routerLink]="" (click)="openAccountModal()" mat-raised-button color="primary" type="button">Add Account</a>
+                                </div>
+                                <br/><br/>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="col-sm-12 mt-3" style="width: 100%">
+                            <div class="card " style="width: 100%">
+
+                              <div class="card-body widget widget-fullwidth widget-small">
+
+                                <table class="table table-striped table-bordered table-hover table-fw-widget" >
+                                  <thead>
+                                  <tr>
+                                    <th scope="col">Account Name</th>
+                                    <th scope="col">Account Number</th>
+                                    <th scope="col">Scheme Code</th>
+                                    <th scope="col">Currency</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Date Created</th>
+                                    <th scope="col" *ngIf="authenticationService.hasRole(roleTypes.ADMIN)">Actions</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                  <ng-container *ngIf="accounts?.length; else noData">
+                                    <tr *ngFor="let account of accounts; let i=index">
+                                      <td>{{account.accountName}}</td>
+                                      <td>{{account.accountNumber}}</td>
+                                      <td>{{account.schemeCode}}</td>
+                                      <td>{{account.currency}}</td>
+                                      <td>{{account.status}}</td>
+                                      <td>{{account.createdAt}}</td>
+                                      <td *ngIf="authenticationService.hasRole(roleTypes.ADMIN)">
+                                        <span>
+                                          <button class="btn btn-sm u-btn-primary" (click)="approveAccount(account, true)"
+                                                  matTooltip="Approve" *ngIf="account.status == genericStatus.INACTIVE"><i
+                                            class='fa fa-check'></i></button>
+                                          <button class="btn btn-sm u-btn-primary" (click)="approveAccount(account, false)"
+                                                  matTooltip="Reject" *ngIf="account.status == genericStatus.INACTIVE">
+                                            <i class='fa fa-times'></i></button>
+                                        </span>
+                                      </td>
+                                    </tr>
+                                  </ng-container>
+                                  <ng-template #noData>
+                                    <tr>
+                                      <td colspan="10" class="text-center"> NO DATA </td>
+                                    </tr>
+                                  </ng-template>
+                                  </tbody>
+                                </table>
+                              </div>
+
+                              <mat-paginator *ngIf="accounts?.length" #paginator class="mat-elevation-z1" [length]="accounts?.length" [pageSize]="10"
+                                             [pageSizeOptions]="[5, 10, 25, 50, 100]"></mat-paginator>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Manage Schedules">
+                <div id="schedules">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="widget widget-fullwidth widget-small">
+
+                        <div class="row">
+                          <div class="col-md-8" *ngIf="authenticationService.hasRole(roleTypes.ADMIN)">
+                            <div style="background: white; padding: 16px" class="mat-elevation-z1 bg-filter">
+                              <div>
+                                <div class="" style="text-align: end; float: right;">
+                                  <a [routerLink]="" (click)="openScheduleModal()" mat-raised-button color="primary" type="button">Add Schedule</a>
+                                </div>
+                                <br/><br/>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="col-sm-12 mt-3" >
+                            <div class="card ">
+
+                              <div class="card-body widget widget-fullwidth widget-small">
+
+                                <table class="table table-striped table-bordered table-hover table-fw-widget" >
+                                  <thead>
+                                  <tr>
+                                    <th scope="col">Id</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Period</th>
+                                    <th scope="col">Minute</th>
+                                    <th scope="col">Hour</th>
+                                    <th scope="col">Date Created</th>
+                                    <th scope="col">Edit</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                  <ng-container *ngIf="schedules?.length; else noData">
+                                    <tr *ngFor="let schedule of schedules; let i=index">
+                                      <td>{{schedule.id}}</td>
+                                      <td>{{schedule.name}}</td>
+                                      <td>{{schedule.period}}</td>
+                                      <td>{{schedule.minute}}</td>
+                                      <td>{{schedule.hour}}</td>
+                                      <td>{{schedule.createdAt}}</td>
+                                      <td>
+                                        <span *ngIf="authenticationService.hasRole(roleTypes.ADMIN)">
+                                          <button class="btn btn-sm u-btn-primary" (click)="openEditScheduleModal(schedule)" matTooltip="Edit Schedule"><i
+                                            class='fa fa-edit'></i></button>
+                                        </span>
+                                      </td>
+                                    </tr>
+                                  </ng-container>
+                                  <ng-template #noData>
+                                    <tr>
+                                      <td colspan="10" class="text-center"> NO DATA </td>
+                                    </tr>
+                                  </ng-template>
+                                  </tbody>
+                                </table>
+                              </div>
+
+                              <mat-paginator *ngIf="schedules?.length" #paginator class="mat-elevation-z1" [length]="schedules?.length" [pageSize]="10"
+                                             [pageSizeOptions]="[5, 10, 25, 50, 100]"></mat-paginator>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Manage Tables">
+                <div id="tables">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="widget widget-fullwidth widget-small">
+
+                        <div class="row">
+                          <div class="col-md-8" *ngIf="authenticationService.hasRole(roleTypes.ADMIN)">
+                            <div style="background: white; padding: 16px" class="mat-elevation-z1 bg-filter">
+                              <div>
+                                <div class="" style="text-align: end; float: right;">
+                                  <a [routerLink]="" (click)="openTableModal()" mat-raised-button color="primary" type="button">Add Table</a>
+                                </div>
+                                <br/><br/>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="col-sm-12 mt-3" >
+                            <div class="card ">
+
+                              <div class="card-body widget widget-fullwidth widget-small">
+
+                                <table class="table table-striped table-bordered table-hover table-fw-widget" >
+                                  <thead>
+                                  <tr>
+                                    <th scope="col">Id</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Allows Reconciliation</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Date Created</th>
+                                    <th scope="col">View</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                  <ng-container *ngIf="tables?.length; else noData">
+                                    <tr *ngFor="let table of tables; let i=index">
+                                      <td>{{table.id}}</td>
+                                      <td>{{table.name}}</td>
+                                      <td>{{table.canReconcile}}</td>
+                                      <td>{{table.description}}</td>
+                                      <td>{{table.createdAt}}</td>
+                                      <td>
+                                        <span>
+                                          <button class="btn btn-sm u-btn-primary" (click)="viewColumns(table)" matTooltip="View Columns"><i
+                                            class='fa fa-eye'></i></button>
+                                        </span>
+                                      </td>
+                                    </tr>
+                                  </ng-container>
+                                  <ng-template #noData>
+                                    <tr>
+                                      <td colspan="10" class="text-center"> NO DATA </td>
+                                    </tr>
+                                  </ng-template>
+                                  </tbody>
+                                </table>
+                              </div>
+
+                              <mat-paginator *ngIf="tables?.length" #paginator class="mat-elevation-z1" [length]="tables?.length" [pageSize]="10"
+                                             [pageSizeOptions]="[5, 10, 25, 50, 100]"></mat-paginator>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Manage Connections">
+                <div id="connections">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="widget widget-fullwidth widget-small">
+
+                        <div class="row">
+                          <div class="col-md-8" *ngIf="authenticationService.hasRole(roleTypes.ADMIN)">
+                            <div style="background: white; padding: 16px" class="mat-elevation-z1 bg-filter">
+                              <div>
+                                <div class="" style="text-align: end; float: right;">
+                                  <a [routerLink]="" (click)="openConnectionModal()" mat-raised-button color="primary" type="button">Add Connection</a>
+                                </div>
+                                <br/><br/>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="col-sm-12 mt-3" >
+                            <div class="card ">
+
+                              <div class="card-body widget widget-fullwidth widget-small" style="overflow-x:auto;">
+
+                                <table class="table table-striped table-bordered table-hover table-fw-widget" >
+                                  <thead>
+                                  <tr>
+                                    <th scope="col">Id</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Username</th>
+                                    <th scope="col">URL</th>
+                                    <th scope="col">Date Created</th>
+                                    <th scope="col" *ngIf="authenticationService.hasRole(roleTypes.ADMIN)">Edit</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                  <ng-container *ngIf="connections?.length; else noData">
+                                    <tr *ngFor="let connection of connections; let i=index">
+                                      <td>{{connection.id}}</td>
+                                      <td>{{connection.name}}</td>
+                                      <td>{{connection.username}}</td>
+                                      <td>{{connection.url}}</td>
+                                      <td>{{connection.createdAt}}</td>
+                                      <td>
+                                        <span *ngIf="authenticationService.hasRole(roleTypes.ADMIN)">
+                                          <button class="btn btn-sm u-btn-primary" (click)="openEditConnectionModal(connection)" matTooltip="Edit Connection"><i
+                                            class='fa fa-edit'></i></button>
+                                        </span>
+                                      </td>
+                                    </tr>
+                                  </ng-container>
+                                  <ng-template #noData>
+                                    <tr>
+                                      <td colspan="10" class="text-center"> NO DATA </td>
+                                    </tr>
+                                  </ng-template>
+                                  </tbody>
+                                </table>
+                              </div>
+
+                              <mat-paginator *ngIf="connections?.length" #paginator class="mat-elevation-z1" [length]="connections?.length" [pageSize]="10"
+                                             [pageSizeOptions]="[5, 10, 25, 50, 100]"></mat-paginator>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Manage Tasks">
+                <div id="tasks">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="widget widget-fullwidth widget-small">
+
+                        <div class="row">
+                          <div class="col-md-8" *ngIf="authenticationService.hasRole(roleTypes.ADMIN)">
+                            <div style="background: white; padding: 16px" class="mat-elevation-z1 bg-filter">
+                              <div>
+                                <div class="" style="text-align: end; float: right;">
+                                  <a [routerLink]="" (click)="openTaskModal()" mat-raised-button color="primary" type="button">Add Task</a>
+                                </div>
+                                <br/><br/>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="col-sm-12 mt-3" >
+                            <div class="card ">
+
+                              <div class="card-body widget widget-fullwidth widget-small" style="overflow-x:auto;">
+
+                                <table class="table table-striped table-bordered table-hover table-fw-widget">
+                                  <thead>
+                                  <tr>
+                                    <th scope="col">Id</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Reconciles</th>
+                                    <th scope="col">Account In Data</th>
+                                    <th scope="col">Amount In Data</th>
+                                    <th scope="col">Narration</th>
+                                    <th scope="col">Table</th>
+                                    <th scope="col">Schedule</th>
+                                    <th scope="col">Connection</th>
+                                    <th scope="col">Account Table</th>
+                                    <th scope="col">Account Column</th>
+                                    <th scope="col">Fetch Account Column</th>
+                                    <th scope="col">Date Created</th>
+                                    <th scope="col" *ngIf="authenticationService.hasRole(roleTypes.ADMIN)">Action</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                  <ng-container *ngIf="tasks?.length; else noData">
+                                    <tr *ngFor="let task of tasks; let i=index">
+                                      <td>{{task.id}}</td>
+                                      <td>{{task.name}}</td>
+                                      <td>{{task.reconcile}}</td>
+                                      <td>{{task.accountInData}}</td>
+                                      <td>{{task.amountInData}}</td>
+                                      <td>{{task.narration}}</td>
+                                      <td>{{task.table.name}}</td>
+                                      <td>{{task.schedule.name}}</td>
+                                      <td>{{task.connection.name}}</td>
+                                      <td>{{task.fetchTable}}</td>
+                                      <td>{{task.accountColumn}}</td>
+                                      <td>{{task.fetchColumn}}</td>
+                                      <td>{{task.createdAt}}</td>
+                                      <td>
+                                        <span *ngIf="authenticationService.hasRole(roleTypes.ADMIN)">
+                                          <button class="btn btn-sm u-btn-primary" (click)="openEditTaskModal(task)" matTooltip="Edit Task"><i
+                                            class='fa fa-edit'></i></button>
+                                          <button class="btn btn-sm u-btn-primary" (click)="processTask(task)" matTooltip="Process Task"><i
+                                            class='fa fa-spinner'></i></button>
+                                        </span>
+                                      </td>
+                                    </tr>
+                                  </ng-container>
+                                  <ng-template #noData>
+                                    <tr>
+                                      <td colspan="14" class="text-center"> NO DATA </td>
+                                    </tr>
+                                  </ng-template>
+                                  </tbody>
+                                </table>
+                              </div>
+
+                              <mat-paginator *ngIf="tasks?.length" #paginator class="mat-elevation-z1" [length]="tasks?.length" [pageSize]="10"
+                                             [pageSizeOptions]="[5, 10, 25, 50, 100]"></mat-paginator>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </div>
+      </div>
+
+
+      <a #downloadAnchor style="display: none;"></a>
+    </div>
+  </div>
+</div>
+
+<ng-template #accountModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Create New Account</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <form [formGroup]="accountForm">
+
+        <div class="alert alert-danger" *ngIf="error">
+          {{error}}
+        </div>
+        <div class="alert alert-success" *ngIf="success">
+          {{success}}
+        </div>
+
+        <mat-form-field appearance="standard" matTooltip="Account Number">
+          <input matInput type="text" required formControlName="accountNumber" autocomplete="off" placeholder="Account Number">
+        </mat-form-field>
+        <span style="padding-left: 30px">
+          <button mat-raised-button color="primary" (click)="fetchAccount()" type="button" [class.disabled]="!accountNumber">
+            <i class="fa fa-spinner fa-pulse" *ngIf="fetchingAccount"></i>&nbsp;Fetch Account Details</button>
+        </span>
+        <hr/>
+        <div *ngIf="account && account.accountNumber">
+          <div style="border:1px solid #ddd; font-size:15px; padding:20px 30px;">
+            <div class="row">
+              <div class="col-md-6 col-xs-6 text-right">
+                Account Name:
+              </div>
+              <div class="col-md-6 col-xs-6">
+                <b>{{account.accountName}}</b>
+              </div>
+              <div class="col-md-6 col-xs-6 text-right">
+                Account Number:
+              </div>
+              <div class="col-md-6 col-xs-6">
+                <b>{{account.accountNumber}}</b>
+              </div>
+              <div class="col-md-6 col-xs-6 text-right">
+                BVN:
+              </div>
+              <div class="col-md-6 col-xs-6">
+                <b>{{account.bvn}}</b>
+              </div>
+              <div class="col-md-6 col-xs-6 text-right">
+                Scheme Code:
+              </div>
+              <div class="col-md-6 col-xs-6">
+                <b>{{account.schemeCode}}</b>
+              </div>
+              <div class="col-md-6 col-xs-6 text-right">
+                Status:
+              </div>
+              <div class="col-md-6 col-xs-6">
+                <b>{{account.status}}</b>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center" style="margin-top: 30px;">
+          <button mat-raised-button color="primary" (click)="createAccount()">
+            <i class="fa fa-spinner fa-pulse" *ngIf="false"></i>&nbsp;Create Account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #taskModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Create New Task</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <form [formGroup]="taskForm" (ngSubmit)="saveTask()">
+
+        <div class="alert alert-danger" *ngIf="error">
+          {{error}}
+        </div>
+        <div class="alert alert-success" *ngIf="success">
+          {{success}}
+        </div>
+
+        <mat-form-field appearance="standard" matTooltip="Name">
+          <input matInput type="text" required formControlName="name" autocomplete="off" placeholder="Name">
+        </mat-form-field>
+
+        <mat-form-field appearance="standard" matTooltip="Schedule">
+          <mat-select formControlName="scheduleId" required placeholder="Select Schedule">
+            <mat-option [value]="''">
+              Not Set
+            </mat-option>
+            <mat-option *ngFor="let schedule of schedules" [value]="schedule.id">
+              {{schedule.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-checkbox matTooltip="Account number in data" [ngModelOptions]="{standalone: true}" [(ngModel)]="accountInData"></mat-checkbox>&nbsp;Account number in data&nbsp;
+        <mat-checkbox matTooltip="Reconciliation Required" [ngModelOptions]="{standalone: true}" [(ngModel)]="taskReconcile"
+                    (ngModelChange)="amountOrReconcileFieldClicked(false)"></mat-checkbox>&nbsp;Reconciliation Required&nbsp;
+        <mat-checkbox matTooltip="Amount number in data" [ngModelOptions]="{standalone: true}" [(ngModel)]="taskAmountInData"
+                      (ngModelChange)="amountOrReconcileFieldClicked(false)" ></mat-checkbox>&nbsp;Amount in data&nbsp;
+
+        <mat-form-field appearance="standard" matTooltip="Table">
+          <mat-select formControlName="tableId" required placeholder="Select Table">
+            <mat-option [value]="''">
+              Not Set
+            </mat-option>
+            <mat-option *ngFor="let table of taskTables" [value]="table.id">
+              {{table.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="standard" matTooltip="Account">
+          <mat-select formControlName="accountId" required placeholder="Select Account">
+            <mat-option [value]="''">
+              Not Set
+            </mat-option>
+            <mat-option *ngFor="let account of accounts" [value]="account.id">
+              {{account.accountNumber}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="standard" matTooltip="Connection">
+          <mat-select formControlName="connectionId" required placeholder="Select Connection">
+            <mat-option [value]="''">
+              Not Set
+            </mat-option>
+            <mat-option *ngFor="let connection of connections" [value]="connection.id">
+              {{connection.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="standard" matTooltip="Narration">
+          <input matInput type="text" required formControlName="narration" placeholder="Narration">
+        </mat-form-field>
+
+        <mat-form-field appearance="standard" matTooltip="Description">
+          <input matInput type="text" formControlName="description" placeholder="Description">
+        </mat-form-field>
+        <mat-form-field *ngIf="!taskAmountInData" appearance="standard" matTooltip="Unit Fee">
+          <input matInput type="number" min="0" formControlName="charge" placeholder="Fee per unit">
+        </mat-form-field>
+
+        <hr>
+        <h5>Fields to fetch account number from table(s) or view</h5>
+        <mat-form-field appearance="standard" matTooltip="Table Name">
+          <input matInput type="text" formControlName="fetchTable" placeholder="Table Name">
+        </mat-form-field>
+        <mat-form-field appearance="standard" matTooltip="Search By Column">
+          <input matInput type="text" formControlName="fetchColumn" placeholder="Search By Column">
+        </mat-form-field>
+        <mat-form-field appearance="standard" matTooltip="Account Number Column">
+          <input matInput type="text" formControlName="accountColumn" placeholder="Account Number Column">
+        </mat-form-field>
+
+        <div class="text-center">
+          <button mat-raised-button color="primary" type="submit">
+            <i class="fa fa-spinner fa-pulse" *ngIf="false"></i>&nbsp;Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #editTaskModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Edit Task</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <form [formGroup]="editTaskForm" (ngSubmit)="editTask()">
+
+        <div class="alert alert-danger" *ngIf="error">
+          {{error}}
+        </div>
+        <div class="alert alert-success" *ngIf="success">
+          {{success}}
+        </div>
+
+        <mat-form-field appearance="standard" matTooltip="Name">
+          <input matInput type="text" required formControlName="name" autocomplete="off" placeholder="Name">
+        </mat-form-field>
+
+        <mat-form-field appearance="standard" matTooltip="Schedule">
+          <mat-select formControlName="scheduleId" required placeholder="Select Schedule">
+            <mat-option [value]="''">
+              Not Set
+            </mat-option>
+            <mat-option *ngFor="let schedule of schedules" [value]="schedule.id">
+              {{schedule.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-checkbox matTooltip="Account number in data" [ngModelOptions]="{standalone: true}" [(ngModel)]="accountInData"></mat-checkbox>&nbsp;Account number in data
+        <mat-checkbox matTooltip="Reconciliation Required" [ngModelOptions]="{standalone: true}" [(ngModel)]="taskReconcile"
+                      (ngModelChange)="amountOrReconcileFieldClicked(false)"></mat-checkbox>&nbsp;Reconciliation Required&nbsp;
+        <mat-checkbox matTooltip="Amount number in data" [ngModelOptions]="{standalone: true}" [(ngModel)]="taskAmountInData" (ngModelChange)="amountOrReconcileFieldClicked(false)"></mat-checkbox>&nbsp;Amount in data
+
+        <mat-form-field appearance="standard" matTooltip="Table">
+          <mat-select formControlName="tableId" required placeholder="Select Table">
+            <mat-option [value]="''">
+              Not Set
+            </mat-option>
+            <mat-option *ngFor="let table of taskTables" [value]="table.id">
+              {{table.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="standard" matTooltip="Account">
+          <mat-select formControlName="accountId" required placeholder="Select Account">
+            <mat-option [value]="''">
+              Not Set
+            </mat-option>
+            <mat-option *ngFor="let account of accounts" [value]="account.id">
+              {{account.accountNumber}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="standard" matTooltip="Connection">
+          <mat-select formControlName="connectionId" required placeholder="Select Connection">
+            <mat-option [value]="''">
+              Not Set
+            </mat-option>
+            <mat-option *ngFor="let connection of connections" [value]="connection.id">
+              {{connection.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="standard" matTooltip="Narration">
+          <input matInput required type="text" formControlName="narration" placeholder="Narration">
+        </mat-form-field>
+
+        <mat-form-field appearance="standard" matTooltip="Description">
+          <input matInput type="text" formControlName="description" placeholder="Description">
+        </mat-form-field>
+        <mat-form-field *ngIf="!amountInData" appearance="standard" matTooltip="Unit Fee">
+          <input matInput type="number" min="0" formControlName="charge" placeholder="Fee per unit">
+        </mat-form-field>
+        <hr>
+        <h5>Fields to fetch account number from table(s) or view</h5>
+        <mat-form-field appearance="standard" matTooltip="Table Name">
+          <input matInput type="text" formControlName="fetchTable" placeholder="Table Name">
+        </mat-form-field>
+        <mat-form-field appearance="standard" matTooltip="Search By Column">
+          <input matInput type="text" formControlName="fetchColumn" placeholder="Search By Column">
+        </mat-form-field>
+        <mat-form-field appearance="standard" matTooltip="Account Number Column">
+          <input matInput type="text" formControlName="accountColumn" placeholder="Account Number Column">
+        </mat-form-field>
+        <div class="text-center">
+          <button mat-raised-button color="primary" type="submit">
+            <i class="fa fa-spinner fa-pulse" *ngIf="false"></i>&nbsp;Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #scheduleModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Create New Schedule</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <form [formGroup]="scheduleForm" (ngSubmit)="saveSchedule()">
+
+        <div class="alert alert-danger" *ngIf="error">
+          {{error}}
+        </div>
+        <div class="alert alert-success" *ngIf="success">
+          {{success}}
+        </div>
+
+        <mat-form-field appearance="standard" matTooltip="Name">
+          <input matInput type="text" required formControlName="name" autocomplete="off" placeholder="Name">
+        </mat-form-field>
+
+        <mat-form-field appearance="standard" matTooltip="Select Schedule Period">
+          <mat-select formControlName="period" required placeholder="Select Schedule Period">
+            <mat-option [value]="''">
+              Not Set
+            </mat-option>
+            <mat-option *ngFor="let period of selectOptions.jobPeriods" [value]="period">
+              {{period}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="standard" matTooltip="Minute">
+          <input matInput type="number" min="0" max="59" required formControlName="minute" autocomplete="off" placeholder="Minute">
+        </mat-form-field>
+        <mat-form-field appearance="standard" matTooltip="Hour">
+          <input matInput type="number" min="0" max="23" required formControlName="hour" autocomplete="off" placeholder="Hour">
+        </mat-form-field>
+
+        <div class="text-center">
+          <button mat-raised-button color="primary" type="submit">
+            <i class="fa fa-spinner fa-pulse" *ngIf="false"></i>&nbsp;Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #editScheduleModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Edit Schedule</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <form [formGroup]="editScheduleForm" (ngSubmit)="editSchedule()">
+
+        <div class="alert alert-danger" *ngIf="error">
+          {{error}}
+        </div>
+        <div class="alert alert-success" *ngIf="success">
+          {{success}}
+        </div>
+
+        <mat-form-field appearance="standard" matTooltip="Name">
+          <input matInput type="text" required formControlName="name" autocomplete="off" placeholder="Name">
+        </mat-form-field>
+
+        <mat-form-field appearance="standard" matTooltip="Select Schedule Period">
+          <mat-select formControlName="period" required placeholder="Select Schedule Period">
+            <mat-option [value]="''">
+              Not Set
+            </mat-option>
+            <mat-option *ngFor="let period of selectOptions.jobPeriods" [value]="period">
+              {{period}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="standard" matTooltip="Minute">
+          <input matInput type="number" min="0" max="59" required formControlName="minute" autocomplete="off" placeholder="Minute">
+        </mat-form-field>
+        <mat-form-field appearance="standard" matTooltip="Hour">
+          <input matInput type="number" min="0" max="23" required formControlName="hour" autocomplete="off" placeholder="Hour">
+        </mat-form-field>
+
+        <div class="text-center">
+          <button mat-raised-button color="primary" type="submit">
+            <i class="fa fa-spinner fa-pulse" *ngIf="false"></i>&nbsp;Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #connectionModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Create New Connection</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <form [formGroup]="connectionForm" (ngSubmit)="saveConnection()">
+
+        <div class="alert alert-danger" *ngIf="error">
+          {{error}}
+        </div>
+        <div class="alert alert-success" *ngIf="success">
+          {{success}}
+        </div>
+
+        <mat-form-field appearance="standard" matTooltip="Name">
+          <input matInput type="text" required formControlName="name" autocomplete="off" placeholder="Name">
+        </mat-form-field>
+
+        <mat-form-field appearance="standard" matTooltip="Select Driver Type">
+          <mat-select formControlName="driverType" required placeholder="Select Driver Type">
+            <mat-option [value]="''">
+              Not Set
+            </mat-option>
+            <mat-option *ngFor="let driver of selectOptions.driverTypes" [value]="driver">
+              {{driver}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="standard" matTooltip="Username">
+          <input matInput type="text" required formControlName="username" autocomplete="off" placeholder="Username">
+        </mat-form-field>
+        <mat-form-field appearance="standard" matTooltip="Password">
+          <input matInput type="password" formControlName="password" autocomplete="off" placeholder="Password">
+        </mat-form-field>
+
+        <mat-form-field style="width: 400px;" appearance="standard" matTooltip="URL">
+          <input matInput type="text" required formControlName="url" autocomplete="off" placeholder="URL">
+        </mat-form-field>
+
+        <div class="text-center">
+          <button mat-raised-button color="primary" type="submit">
+            <i class="fa fa-spinner fa-pulse" *ngIf="false"></i>&nbsp;Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #editConnectionModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Edit Connection</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <form [formGroup]="editConnectionForm" (ngSubmit)="editConnection()">
+
+        <div class="alert alert-danger" *ngIf="error">
+          {{error}}
+        </div>
+        <div class="alert alert-success" *ngIf="success">
+          {{success}}
+        </div>
+
+        <mat-form-field appearance="standard" matTooltip="Name">
+          <input matInput type="text" required formControlName="name" autocomplete="off" placeholder="Name">
+        </mat-form-field>
+
+        <mat-form-field appearance="standard" matTooltip="Select Driver Type">
+          <mat-select formControlName="driverType" required placeholder="Select Driver Type">
+            <mat-option [value]="''">
+              Not Set
+            </mat-option>
+            <mat-option *ngFor="let driver of selectOptions.driverTypes" [value]="driver">
+              {{driver}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="standard" matTooltip="Username">
+          <input matInput type="text" required formControlName="username" autocomplete="off" placeholder="Username">
+        </mat-form-field>
+        <mat-form-field appearance="standard" matTooltip="Password">
+          <input matInput type="password" formControlName="password" autocomplete="off" placeholder="Password">
+        </mat-form-field>
+
+        <mat-form-field style="width: 400px;" appearance="standard" matTooltip="URL">
+          <input matInput type="text" required formControlName="url" autocomplete="off" placeholder="URL">
+        </mat-form-field>
+
+        <div class="text-center">
+          <button mat-raised-button color="primary" type="submit">
+            <i class="fa fa-spinner fa-pulse" *ngIf="false"></i>&nbsp;Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #tableModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Create Table</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <form [formGroup]="tableForm" (ngSubmit)="saveTableData()" style="overflow-x:auto;">
+
+        <div class="alert alert-danger" *ngIf="error">
+          {{error}}
+        </div>
+        <div class="alert alert-success" *ngIf="success">
+          {{success}}
+        </div>
+        <h5>Table Definition</h5>
+        <mat-form-field appearance="standard" matTooltip="Table Name">
+          <input matInput type="text" required formControlName="name" autocomplete="off" placeholder="Table Name">
+        </mat-form-field>
+        <mat-form-field appearance="standard" matTooltip="Table Description">
+          <input matInput type="text" formControlName="description" autocomplete="off" placeholder="Table Description">
+        </mat-form-field>
+        <mat-checkbox matTooltip="Allow Reconciliation" [ngModelOptions]="{standalone: true}" [(ngModel)]="tableReconcile">
+        </mat-checkbox>&nbsp;Allow Reconciliation
+        <mat-checkbox matTooltip="Amount In Data" [ngModelOptions]="{standalone: true}" [(ngModel)]="amountInData">
+        </mat-checkbox>&nbsp;Amount In Data
+        <hr>
+        <h5>Column Definition</h5>
+        <table style="border-collapse: collapse; border: none;">
+          <thead><tr style="border: none;">
+            <th style="border: none; padding: 5px 15px!important; text-align: left!important;">Index</th>
+            <th style="border: none; padding: 5px 15px!important; text-align: left!important;">Name</th>
+            <th style="border: none; padding: 5px 15px!important; text-align: left!important;">Data Type</th>
+            <th style="border: none; padding: 5px 15px!important; text-align: left!important;">Size</th>
+            <th style="border: none; padding: 5px 15px!important; text-align: left!important;">Unique Constraint</th>
+            <th style="border: none; padding: 5px 15px!important; text-align: left!important;">Identifier Column</th>
+            <th style="border: none; padding: 5px 15px!important; text-align: left!important;" *ngIf="tableReconcile">Reconciliation Column</th>
+            <th style="border: none; padding: 5px 15px!important; text-align: left!important;" *ngIf="amountInData">Amount Column</th>
+            <th style="border: none; padding: 5px 15px!important; text-align: left!important;">Remove</th>
+          </tr></thead>
+          <tbody><tr *ngFor="let column of columns; let i = index" style="border: none;">
+            <td style="border: none; padding: 5px 15px!important; text-align: left!important;">{{i + 1}}</td>
+            <td style="border: none; padding: 5px 15px!important; text-align: left!important;">
+              <mat-form-field style="width: 100px;" appearance="standard" matTooltip="Column Name">
+                <input matInput type="text" placeholder="Column Name" [ngModelOptions]="{standalone: true}" required [(ngModel)]="column.name" autocomplete="off">
+              </mat-form-field>
+            </td>
+            <td style="border: none; padding: 5px 15px!important; text-align: left!important;">
+              <mat-form-field appearance="standard" matTooltip="Data type">
+                <mat-select [ngModelOptions]="{standalone: true}" required placeholder="Data type" [(ngModel)]="column.dataType" [ngModelOptions]="{standalone: true}">
+                  <mat-option [value]="''">
+                    Not Set
+                  </mat-option>
+                  <mat-option *ngFor="let dataType of selectOptions.dataTypes" [value]="dataType">
+                    {{dataType}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </td>
+            <td style="border: none; padding: 5px 15px!important; text-align: left!important;">
+              <mat-form-field style="width: 100px; padding: 0" appearance="standard" matTooltip="String length" *ngIf="column.dataType == dataTypes.VARCHAR">
+                <input matInput type="number" placeholder="String length" [ngModelOptions]="{standalone: true}" required [(ngModel)]="column.dataSize" autocomplete="off">
+              </mat-form-field>
+            </td>
+            <td style="border: none; padding: 10px 15px!important; text-align: left!important;">
+              <mat-checkbox style="display: inline-block; margin-top: 15px;" matTooltip="Add unique constraint" [ngModelOptions]="{standalone: true}" [(ngModel)]="column.unique"></mat-checkbox>
+            </td>
+            <td style="border: none; padding: 5px 15px!important; text-align: left!important;">
+              <input class="check" type="radio" value="{{column.count}}" name="identifierId" formControlName="identifierId">
+            </td>
+            <td style="border: none; padding: 5px 15px!important; text-align: left!important;" *ngIf="tableReconcile">
+              <input class="check" type="radio" value="{{column.count}}" name="reconciliationId" formControlName="reconciliationId">
+            </td>
+            <td style="border: none; padding: 5px 15px!important; text-align: left!important;" *ngIf="amountInData">
+              <input class="check" type="radio" value="{{column.count}}" name="amountId" formControlName="amountId">
+            </td>
+            <td style="border: none; padding: 5px 15px!important; text-align: left!important;">
+              <span>
+                <button class="btn btn-sm u-btn-primary" type="button" matTooltip="Remove" (click)="deleteColumn(column)"><i
+                  class='fa fa-times'></i></button>
+              </span>
+            </td>
+          </tr></tbody>
+          <tfoot>
+          <tr>
+            <td>
+            </td>
+          </tr>
+          </tfoot>
+        </table>
+
+        <div class="text-center" style="margin-top: 20px;">
+          <button mat-raised-button color="primary"
+                   type="button" (click)="addColumn()">
+            <i class="fa fa-spinner fa-pulse" *ngIf="false"></i>&nbsp;Add Column</button>&nbsp;
+          <button mat-raised-button color="primary" type="submit">
+            <i class="fa fa-spinner fa-pulse" *ngIf="false"></i>&nbsp;Save</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</ng-template>
+
+
+<ng-template #columnModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Table: {{table?.name}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+        <h5>Columns</h5>
+        <table style="border-collapse: collapse; border: none;">
+          <thead><tr style="border: none;">
+            <th style="border: none; padding: 5px 15px!important; text-align: left!important;">Index</th>
+            <th style="border: none; padding: 5px 15px!important; text-align: left!important;">Name</th>
+            <th style="border: none; padding: 5px 15px!important; text-align: left!important;">Data Type</th>
+            <th style="border: none; padding: 5px 15px!important; text-align: left!important;">Size</th>
+            <th style="border: none; padding: 5px 15px!important; text-align: left!important;">Unique</th>
+            <th style="border: none; padding: 5px 15px!important; text-align: left!important;">Identifier Column</th>
+            <th style="border: none; padding: 5px 15px!important; text-align: left!important;">Reconciliation</th>
+            <th style="border: none; padding: 5px 15px!important; text-align: left!important;">Amount Column</th>
+          </tr></thead>
+          <tbody><tr *ngFor="let column of table?.columns; let i = index" style="border: none;">
+            <td style="border: none; padding: 5px 15px!important; text-align: left!important;">{{i + 1}}</td>
+            <td style="border: none; padding: 5px 15px!important; text-align: left!important;">
+              {{column.name}}
+            </td>
+            <td style="border: none; padding: 5px 15px!important; text-align: left!important;">
+              {{column.dataType}}
+            </td>
+            <td style="border: none; padding: 5px 15px!important; text-align: left!important;">
+              {{column.dataSize}}
+            </td>
+            <td style="border: none; padding: 5px 15px!important; text-align: left!important;">
+              {{column.unique}}
+            </td>
+            <td style="border: none; padding: 5px 15px!important; text-align: left!important;">
+              {{column.identifier}}
+            </td>
+            <td style="border: none; padding: 5px 15px!important; text-align: left!important;">
+              {{column.reconciliation}}
+            </td>
+            <td style="border: none; padding: 5px 15px!important; text-align: left!important;">
+              {{column.amountField}}
+            </td>
+          </tr></tbody>
+          <tfoot>
+          <tr>
+            <td>
+            </td>
+          </tr>
+          </tfoot>
+        </table>
+    </div>
+
+  </div>
+</ng-template>

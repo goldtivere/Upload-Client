@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>PayForMe - Login</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <link rel="icon" href="https://www.coronationmb.com/favicon.ico" type="image/x-icon">
+  <!-- VENDOR CSS -->
+  <link rel="stylesheet" th:href="@{css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{css/font-awesome.min.css}">
+
+  <!-- MAIN CSS -->
+  <link rel="stylesheet" th:href="@{css/main.css}">
+  <link rel="stylesheet" th:href="@{css/color_skins.css}">
+  <style type="text/css">
+    @font-face {
+      font-family: FedraSansStdLight;
+      src: url(/assets/vendor/font/FedraSansStd-LightLF.otf);
+    }
+
+    html,
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p
+    {
+
+      font-family: inherit;
+      font-weight: 400;
+      line-height: 1.71429;
+
+    }
+
+    body {
+      background: #fff;
+      font-size: 13px;
+      font-family: 'FedraSansStdLight';
+      font-weight: normal;
+      color: #003057;
+      height: 100%;
+
+    }
+  </style>
+</head>
+
+<body class="theme-orange">
+<!-- WRAPPER -->
+<div id="wrapper" >
+  <div class="vertical-align-wrap" >
+    <div class="vertical-align-middle auth-main" >
+      <div class="auth-box" >
+        <div class="" >
+
+        </div>
+        <div class="card" >
+          <div class="header align-center m-t-0"  >
+            <img [src]="getLogo()" alt="Lucid" style="width: 200px"><br><br>
+            <p class="lead">Sign up your account</p>
+          </div>
+          <div class="body" >
+            <form [formGroup]="form" class="form-auth-small" (submit)="createPassword()">
+              <div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="error">
+                {{error}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="error=null">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+
+              <div class="form-group">
+                <label for="signin-email" class="control-label sr-only">Phone Number</label>
+                <input formControlName="phone" type="text" class="form-control" id="signin-email" placeholder="Phone Number">
+              </div>
+              <div class="form-group">
+                <label for="passcode" class="control-label sr-only">Pass Code</label>
+                <input type="password" class="form-control" formControlName="passCode" id="passcode" placeholder="Pass Code">
+              </div>
+              <div class="form-group">
+                <label for="password" class="control-label sr-only">Password</label>
+                <input type="password" class="form-control" formControlName="password" id="password" placeholder="Password">
+              </div>
+              <div class="form-group">
+                <label for="confirmpassword" class="control-label sr-only">Confirm Password</label>
+                <input type="password" class="form-control" formControlName="confirmpassword" id="confirmpassword" placeholder="Confirm Password">
+              </div>
+              <div class="form-group">
+                <span>Password length should be 6 minimum and contains at least one uppercase, one lowercase and one digit</span>
+              </div>
+              <button type="submit" class="btn btn-primary btn-lg btn-block">
+                <i class="fa fa-spinner fa-pulse" *ngIf="loading"></i>&nbsp;Submit</button>
+              <div class="bottom">
+                <span class="helper-text m-b-10"><i class="fa fa-lock"></i> <a [routerLink]="['/login']">Login</a></span>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END WRAPPER -->
+</body>
+</html>
+
+
+
+<ng-template #resetPasswordModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Reset Password</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <form [formGroup]="resetPasswordForm" (ngSubmit)="resetPassword()">
+
+        <div class="alert alert-danger" *ngIf="error">
+          {{error}}
+        </div>
+        <div class="alert alert-success" *ngIf="success">
+          {{success}}
+        </div>
+        <mat-form-field appearance="standard" matTooltip="Email">
+          <input matInput type="email" required formControlName="email" autocomplete="off" placeholder="Email">
+        </mat-form-field>
+        <div class="text-center">
+          <button mat-raised-button color="primary" type="submit">
+            <i class="fa fa-spinner fa-pulse" *ngIf="false"></i>&nbsp;Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
