@@ -2,12 +2,15 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {AuthenticationService} from "../../../auth-services/authentication.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {BsModalRef, BsModalService, ModalOptions} from "ngx-bootstrap";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Params} from "@angular/router";
 import {CompanyService} from "../../../app-services/company.service";
 import {ErrorService} from "../../../app-services/error.service";
 import {PaymentService} from "../../../app-services/payment.service";
 import {MatSnackBar, MatSnackBarConfig} from "@angular/material/snack-bar";
 import {RoleType} from "../../../utils/model/role-type.enum";
+import {PageData} from "../../../utils/model/page-data";
+import {UploadQueryModel} from "../../../utils/model/upload-query-model";
+import {GetDebit} from "../../../utils/model/get-debit";
 
 @Component({
   selector: 'app-payment-management',
@@ -18,18 +21,25 @@ export class PaymentManagementComponent implements OnInit {
 
   authenticationService: AuthenticationService;
   user: any;
+  debitData: PageData;
   confirmPayerId: FormGroup;
   confirmPAccountForm: FormGroup;
   bsModalRef: BsModalRef;
   modalOptions = new ModalOptions();
   snackBarConfig = new MatSnackBarConfig();
   success: string;
+  pageLoading=false;
+  userIdAccount:string;
   error: string;
   value: string;
+  pageParams: Params;
+  pageQueryModel: GetDebit = new GetDebit();
   roleTypes = RoleType;
   loading: boolean;
   isPaccountActive: boolean;
   paccountDetails:any;
+  makingSearchCall = false;
+  searchCallQueue = false;
 
   @ViewChild('confirmPayAccountModal', {static: false}) confirmPayAccountModal: any;
   constructor(private fb: FormBuilder, private modalService: BsModalService,
@@ -44,8 +54,10 @@ export class PaymentManagementComponent implements OnInit {
     this.snackBarConfig.duration = 3000;
     this.authenticationService = authService;
     this.confirmPayerId = fb.group({
+      'autenticator': ['', Validators.required],
+      'token': ['', Validators.required],
       'description': ['', Validators.required],
-      'receiverId':['',Validators.required],
+      'userwalletId': [''],
       'amount': ['', Validators.required]
     });
 
@@ -54,9 +66,33 @@ export class PaymentManagementComponent implements OnInit {
     });
 
   }
-
+  getPageParamsAndTablesData() {
+    this.activatedRoute.queryParams.subscribe(response => {
+      this.pageParams = response;
+      this.pageQueryModel.page = this.pageParams['page'];
+      this.pageQueryModel.pageSize = this.pageParams['limit'];
+      this.getDebit();
+    });
+  }
+  getDebit() {
+    if (this.makingSearchCall) {
+      this.searchCallQueue = true;
+      return;
+    }
+    this.makingSearchCall = true;
+    this.searchCallQueue = false;
+    this.paymentService.getDebitList(this.pageQueryModel).subscribe((response: any) => {
+      this.debitData = response;
+      this.pageLoading = false;
+      this.makingSearchCall = false;
+    }, error => {
+      this.makingSearchCall = false;
+      this.pageLoading = false;
+    });
+  }
   ngOnInit() {
     this.getSubscription();
+    this.getPageParamsAndTablesData()
   }
   getSubscription() {
     this.authenticationService.getUser().subscribe(
@@ -67,6 +103,27 @@ export class PaymentManagementComponent implements OnInit {
   }
   makePayment()
   {
+    this.error = null;
+    this.success = null;
+    if (this.loading || !this.confirmPayerId.valid) {
+      this.error = 'Please fill in the form correctly to continue.';
+      return;
+    }
+    this.loading=true;
+    const formValue = this.confirmPayerId.value;
+    formValue['userwalletId']=this.userIdAccount;
+    this.paymentService.initiateDebit(formValue).pipe()
+      .subscribe((response) => {
+        this.loading=false;
+        this.snackBar.open(response.message, null, this.snackBarConfig);
+        this.bsModalRef.hide();
+        this.isPaccountActive=false;
+        this.getSubscription();
+      }, error => {
+        this.loading=false;
+        this.error = this.errorService.getErrorMessage(error);
+        this.snackBar.open(this.error, null, this.snackBarConfig);
+      });
 
   }
 confirmPaccount()
@@ -75,6 +132,7 @@ confirmPaccount()
   this.loading=true;
   this.paymentService.confirmPaccount(formValue['paccount']).pipe().subscribe((response: any) => {
     this.paccountDetails=response;
+    this.userIdAccount=formValue['paccount'];
       this.snackBar.open(`PAccount Exists!`, null, this.snackBarConfig);
       this.bsModalRef.hide();
       this.isPaccountActive=true;

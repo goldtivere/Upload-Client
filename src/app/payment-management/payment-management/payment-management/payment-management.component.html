@@ -20,27 +20,30 @@
       <div class="root-inner" style="width: 100%">
         <div class="card">
           <div class="card-body p-10">
-              <div *ngIf="authenticationService.hasAnyRole([roleTypes.CLIENT_ADMIN,roleTypes.CLIENT_USER])">
-                <div class="col-md-12">
+            <div *ngIf="authenticationService.hasAnyRole([roleTypes.CLIENT_ADMIN,roleTypes.CLIENT_USER])">
+              <div class="col-md-12">
                 <fieldset>
                   <legend>
                     <strong> Accept Payment</strong>
                   </legend>
                   <div *ngIf="isPaccountActive">
                     <form [formGroup]="confirmPayerId" (ngSubmit)="makePayment()">
-                    <mat-form-field appearance="standard" matTooltip="Receiver Id">
-                      <input matInput type="text" required formControlName="receiverId" placeholder="Receiver Id">
-                    </mat-form-field>
-                  <mat-form-field appearance="standard" matTooltip="Amount">
-                    <input matInput type="number" required formControlName="amount" placeholder="amount">
-                  </mat-form-field>
-                    <mat-form-field appearance="standard" matTooltip="Description">
-                      <input matInput type="text" required formControlName="description" placeholder="description">
-                    </mat-form-field>
-                    <button class="btn btn-sm u-btn-primary" matTooltip="Make Payment">Make Payment
-                    </button>
+                      <mat-form-field appearance="standard" matTooltip="Receiver Id">
+                        <input matInput type="text" required formControlName="autenticator" placeholder="Receiver Id">
+                      </mat-form-field>
+                      <mat-form-field appearance="standard" matTooltip="Amount">
+                        <input matInput type="number" required formControlName="amount" placeholder="amount">
+                      </mat-form-field>
+                      <mat-form-field appearance="standard" matTooltip="Description">
+                        <input matInput type="text" required formControlName="description" placeholder="description">
+                      </mat-form-field>
+                      <mat-form-field appearance="standard" matTooltip="Token">
+                        <input matInput type="password" required formControlName="token" placeholder="Token">
+                      </mat-form-field>
+                      <button class="btn btn-sm u-btn-primary" matTooltip="Make Payment">Make Payment
+                      </button>
                     </form>
-                </div>
+                  </div>
                   <div *ngIf="!isPaccountActive">
                     <button
                       *ngIf="authenticationService.hasAnyRole([roleTypes.CLIENT_ADMIN,roleTypes.CLIENT_USER])"
@@ -50,8 +53,8 @@
                   </div>
                 </fieldset>
               </div>
+            </div>
           </div>
-        </div>
         </div>
       </div>
       <div class="col-sm-12 mt-3">
@@ -74,57 +77,57 @@
               </tr>
               </thead>
               <tbody>
-<!--              <ng-container *ngIf="companyData?.totalElements; else noData">-->
-<!--                <tr *ngFor="let company of companyData.content; let i=index">-->
-<!--                  <td>{{company.id}}</td>-->
-<!--                  <td>{{company.licenceNumber}}</td>-->
-<!--                  <td>{{company.name}}</td>-->
-<!--                  <td>{{company.address}}</td>-->
-<!--                  <td>{{company.phoneNumber}}</td>-->
-<!--                  <td>{{company.email}}</td>-->
-<!--                  <td>{{company.bank.bankname}}</td>-->
-<!--                  <td>{{company.accountnumber}}</td>-->
-<!--                  <td>{{company.accountName}}</td>-->
-<!--                  <td>{{company.datecreated}}</td>-->
-<!--                  <td><span>-->
-<!--                                <button-->
-<!--                                  *ngIf="authenticationService.hasAnyRole([roleTypes.ADMIN])"-->
-<!--                                  class="btn btn-sm u-btn-primary" (click)="editCompModal(company)"-->
-<!--                                  matTooltip="Update"><i-->
-<!--                                  class='fa fa-edit'></i>-->
-<!--                                </button>-->
+              <!--              <ng-container *ngIf="companyData?.totalElements; else noData">-->
+              <!--                <tr *ngFor="let company of companyData.content; let i=index">-->
+              <!--                  <td>{{company.id}}</td>-->
+              <!--                  <td>{{company.licenceNumber}}</td>-->
+              <!--                  <td>{{company.name}}</td>-->
+              <!--                  <td>{{company.address}}</td>-->
+              <!--                  <td>{{company.phoneNumber}}</td>-->
+              <!--                  <td>{{company.email}}</td>-->
+              <!--                  <td>{{company.bank.bankname}}</td>-->
+              <!--                  <td>{{company.accountnumber}}</td>-->
+              <!--                  <td>{{company.accountName}}</td>-->
+              <!--                  <td>{{company.datecreated}}</td>-->
+              <!--                  <td><span>-->
+              <!--                                <button-->
+              <!--                                  *ngIf="authenticationService.hasAnyRole([roleTypes.ADMIN])"-->
+              <!--                                  class="btn btn-sm u-btn-primary" (click)="editCompModal(company)"-->
+              <!--                                  matTooltip="Update"><i-->
+              <!--                                  class='fa fa-edit'></i>-->
+              <!--                                </button>-->
 
-<!--                              <a [routerLink]="['/home',company.id, 'companyusers']" class="btn btn-sm u-btn-primary"-->
-<!--                                 matTooltip="View Company Profile"><i class='fa fa-eye'></i></a>-->
-<!--                              </span>-->
-<!--                  </td>-->
+              <!--                              <a [routerLink]="['/home',company.id, 'companyusers']" class="btn btn-sm u-btn-primary"-->
+              <!--                                 matTooltip="View Company Profile"><i class='fa fa-eye'></i></a>-->
+              <!--                              </span>-->
+              <!--                  </td>-->
 
-<!--                  &lt;!&ndash;<td *ngIf="authenticationService.hasRole(roleTypes.ADMIN)">&ndash;&gt;-->
-<!--                  &lt;!&ndash;<span>&ndash;&gt;-->
-<!--                  &lt;!&ndash;<button class="btn btn-sm u-btn-primary" (click)="validateTokenAndApprove(upload, true)"&ndash;&gt;-->
-<!--                  &lt;!&ndash;matTooltip="Approve" *ngIf="upload.status == genericStatus.INACTIVE"><i&ndash;&gt;-->
-<!--                  &lt;!&ndash;class='fa fa-check'></i></button>&ndash;&gt;-->
-<!--                  &lt;!&ndash;<button class="btn btn-sm u-btn-primary" (click)="approveUpload(upload, false)"&ndash;&gt;-->
-<!--                  &lt;!&ndash;matTooltip="Reject" *ngIf="upload.status == genericStatus.INACTIVE">&ndash;&gt;-->
-<!--                  &lt;!&ndash;<i class='fa fa-times'></i></button>&ndash;&gt;-->
-<!--                  &lt;!&ndash;</span>&ndash;&gt;-->
-<!--                  &lt;!&ndash;</td>&ndash;&gt;-->
-<!--                </tr>-->
-<!--              </ng-container>-->
-<!--              <ng-template #noData>-->
-<!--                <tr *ngIf="canShowNoData()">-->
-<!--                  <td colspan="12" class="text-center"> NO DATA</td>-->
-<!--                </tr>-->
-<!--              </ng-template>-->
+              <!--                  &lt;!&ndash;<td *ngIf="authenticationService.hasRole(roleTypes.ADMIN)">&ndash;&gt;-->
+              <!--                  &lt;!&ndash;<span>&ndash;&gt;-->
+              <!--                  &lt;!&ndash;<button class="btn btn-sm u-btn-primary" (click)="validateTokenAndApprove(upload, true)"&ndash;&gt;-->
+              <!--                  &lt;!&ndash;matTooltip="Approve" *ngIf="upload.status == genericStatus.INACTIVE"><i&ndash;&gt;-->
+              <!--                  &lt;!&ndash;class='fa fa-check'></i></button>&ndash;&gt;-->
+              <!--                  &lt;!&ndash;<button class="btn btn-sm u-btn-primary" (click)="approveUpload(upload, false)"&ndash;&gt;-->
+              <!--                  &lt;!&ndash;matTooltip="Reject" *ngIf="upload.status == genericStatus.INACTIVE">&ndash;&gt;-->
+              <!--                  &lt;!&ndash;<i class='fa fa-times'></i></button>&ndash;&gt;-->
+              <!--                  &lt;!&ndash;</span>&ndash;&gt;-->
+              <!--                  &lt;!&ndash;</td>&ndash;&gt;-->
+              <!--                </tr>-->
+              <!--              </ng-container>-->
+              <!--              <ng-template #noData>-->
+              <!--                <tr *ngIf="canShowNoData()">-->
+              <!--                  <td colspan="12" class="text-center"> NO DATA</td>-->
+              <!--                </tr>-->
+              <!--              </ng-template>-->
               </tbody>
             </table>
           </div>
 
 
-<!--          <mat-paginator *ngIf="canShowTable()" #paginator class="mat-elevation-z1"-->
-<!--                         [length]="companyData.totalElements" [pageSize]="10"-->
-<!--                         [pageSizeOptions]="[5, 10, 25, 50, 100]" (page)="onPageChange($event)"></mat-paginator>-->
-<!--          <mat-progress-bar mode="indeterminate" *ngIf="pageLoading"></mat-progress-bar>-->
+          <!--          <mat-paginator *ngIf="canShowTable()" #paginator class="mat-elevation-z1"-->
+          <!--                         [length]="companyData.totalElements" [pageSize]="10"-->
+          <!--                         [pageSizeOptions]="[5, 10, 25, 50, 100]" (page)="onPageChange($event)"></mat-paginator>-->
+          <!--          <mat-progress-bar mode="indeterminate" *ngIf="pageLoading"></mat-progress-bar>-->
         </div>
       </div>
 
