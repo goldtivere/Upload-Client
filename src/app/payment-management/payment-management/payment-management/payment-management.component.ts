@@ -11,6 +11,7 @@ import {RoleType} from "../../../utils/model/role-type.enum";
 import {PageData} from "../../../utils/model/page-data";
 import {UploadQueryModel} from "../../../utils/model/upload-query-model";
 import {GetDebit} from "../../../utils/model/get-debit";
+import {PageEvent} from "@angular/material/paginator";
 
 @Component({
   selector: 'app-payment-management',
@@ -118,6 +119,7 @@ export class PaymentManagementComponent implements OnInit {
         this.snackBar.open(response.message, null, this.snackBarConfig);
         this.bsModalRef.hide();
         this.isPaccountActive=false;
+        this.getDebit();
         this.getSubscription();
       }, error => {
         this.loading=false;
@@ -125,6 +127,17 @@ export class PaymentManagementComponent implements OnInit {
         this.snackBar.open(this.error, null, this.snackBarConfig);
       });
 
+  }
+  canShowNoData() {
+    return (!this.debitData || this.debitData.totalElements == 0) && !this.pageLoading;
+  }
+  canShowTable() {
+    return (this.debitData && this.debitData.totalElements > 0) && !this.pageLoading;
+  }
+  onPageChange(pageEvent: PageEvent) {
+    this.pageQueryModel.pageSize = pageEvent.pageSize;
+    this.pageQueryModel.page = pageEvent.pageIndex;
+    this.getDebit();
   }
 confirmPaccount()
 {
