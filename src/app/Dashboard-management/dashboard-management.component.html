@@ -23,7 +23,7 @@
               <div class="icon"><i class="fa fa-send-o"></i> </div>
               <div class="content">
                 <div class="text">Total Transaction</div>
-                <h5 class="number">100</h5>
+                <h5 class="number">{{transactionList.totalCount}}</h5>
               </div>
             </a>
 
@@ -37,21 +37,7 @@
               <div class="icon"><i class="fa fa-money"></i> </div>
               <div class="content">
                 <div class="text">Successful Transaction</div>
-                <h5 class="number">100</h5>
-              </div>
-            </a>
-
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-3 col-md-4">
-        <div class="card top_counter">
-          <div class="body">
-            <a style="color: black;" [routerLink]="" >
-              <div class="icon"><i class="fa fa-ban"></i> </div>
-              <div class="content">
-                <div class="text">Failed Transaction</div>
-                <h5 class="number">0</h5>
+                <h5 class="number">{{transactionList.successfulTransaction}}</h5>
               </div>
             </a>
 

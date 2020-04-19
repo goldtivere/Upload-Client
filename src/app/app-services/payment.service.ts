@@ -21,4 +21,7 @@ export class PaymentService {
     const queryString = param.serialize();
     return this.httpClient.get(`${environment.apiBaseUrl}/transaction/getdebit?${queryString}`);
   }
+  transactionSummary() {
+    return this.httpClient.get(`${environment.apiBaseUrl}/transaction/transactionsummary`);
+  }
 }

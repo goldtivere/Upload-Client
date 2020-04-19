@@ -9,6 +9,7 @@ import {CompanyUsersComponent} from "./company-mangement/company-users/company-u
 import {SignUpComponent} from "./app-components/auth-components/sign-up/sign-up.component";
 import {DashboardManagementComponent} from "./Dashboard-management/dashboard-management.component";
 import {PaymentManagementComponent} from "./payment-management/payment-management/payment-management/payment-management.component";
+import {AccountManagementComponent} from "./account-management/account-management/account-management.component";
 
 const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'admin/users/list', component: UserManagementComponent, canActivate: [LoggedInGuard]},
   { path: 'admin/config', component: ConfigDetailsComponent, canActivate: [LoggedInGuard]},
   { path : 'dashboard', component : DashboardManagementComponent, canActivate: [LoggedInGuard]},
+  { path : 'account', component : AccountManagementComponent, canActivate: [LoggedInGuard]},
   { path : '', component : DashboardManagementComponent, canActivate: [LoggedInGuard]}
 ];
 

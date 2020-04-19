@@ -22,6 +22,7 @@ import {DialogModule} from './dialog/dialog.module';
 import {CompanyManagementModule} from "./company-mangement/company-management.module";
 import {DashboardManagementModule} from "./Dashboard-management/dashboard-management.module";
 import {PaymentManagementModule} from "./payment-management/payment-management/payment-management.module";
+import {AccountManagementModule} from "./account-management/account-management.module";
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import {PaymentManagementModule} from "./payment-management/payment-management/p
     ReactiveFormsModule,
     DashboardManagementModule,
     PaymentManagementModule,
+    AccountManagementModule,
     MatRadioModule
   ],
   providers: [

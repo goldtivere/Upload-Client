@@ -46,6 +46,7 @@
             <ul class="main-menu metismenu">
               <li *ngIf="authenticationService.isStaffAdmin()"><a [routerLink]="['/home']" [queryParams]="{page: pageUtils.start, limit: pageUtils.limit}"><i class="icon-settings"></i><span>Company Management</span></a></li>
               <li *ngIf="authenticationService.isStaffUser()"><a [routerLink]="['/payments']" [queryParams]="{page: pageUtils.start, limit: pageUtils.limit}"><i class="icon-credit-card"></i>Accept Payment</a></li>
+              <li *ngIf="authenticationService.isClientStaffAdmin()"><a [routerLink]="['/account']" [queryParams]="{page: pageUtils.start, limit: pageUtils.limit}"><i class="icon-settings"></i>Manage Account</a></li>
               <li><a  routerLink="" (click)="openModal()"><i class="icon-lock"></i>Change Password</a></li>
             </ul>
           </nav>

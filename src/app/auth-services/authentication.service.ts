@@ -175,6 +175,10 @@ export class AuthenticationService {
   isStaffUser() {
     return this.hasAnyRole([RoleType.CLIENT_ADMIN, RoleType.CLIENT_USER]);
   }
+
+  isClientStaffAdmin() {
+    return this.hasRole(RoleType.CLIENT_ADMIN);
+  }
   isLoginPage() {
     return this.router.url === '/login';
   }

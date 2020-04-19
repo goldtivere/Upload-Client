@@ -40,7 +40,8 @@
                       <mat-form-field appearance="standard" matTooltip="Token">
                         <input matInput type="password" required formControlName="token" placeholder="Token">
                       </mat-form-field>
-                      <button class="btn btn-sm u-btn-primary" matTooltip="Make Payment">Make Payment
+                      <button mat-raised-button color="primary" type="submit">
+                        <i class="fa fa-spinner fa-pulse" *ngIf="loading"></i>&nbsp;Make Payment
                       </button>
                     </form>
                   </div>
