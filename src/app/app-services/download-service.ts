@@ -18,7 +18,7 @@ export class DownloadService {
   }
   exportAs(type: SupportedExtensions, fileName: string, opt?: string) {
     this.config = {
-      type: 'pdf',
+      type: 'xlsx',
       elementIdOrContent: 'tab',
       options: {
         jsPDF: {
