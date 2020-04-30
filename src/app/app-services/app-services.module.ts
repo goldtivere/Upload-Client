@@ -7,6 +7,7 @@ import {UploadService} from './upload-service';
 import {ScheduleService} from './schedule-service';
 import {AccountService} from './account-service';
 import {ErrorService} from './error.service';
+import {DownloadService} from "./download-service";
 @NgModule({
   imports: [
     CommonModule
@@ -16,6 +17,7 @@ import {ErrorService} from './error.service';
     UserService,
     TableService,
     ConnectionService,
+    DownloadService,
     UploadService,
     ScheduleService,
     AccountService,

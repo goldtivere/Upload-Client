@@ -16,22 +16,16 @@ export class DownloadService {
       fileSaver.saveAs(blob, name);
     });
   }
-  exportAs(type: SupportedExtensions, fileName: string, opt?: string) {
+
+  exportAs(type: SupportedExtensions, fileName: string) {
     this.config = {
-      type: 'xlsx',
-      elementIdOrContent: 'tab',
-      options: {
-        jsPDF: {
-          orientation: 'landscape'
-        }
-      }
+      type: type, // the type you want to download
+      elementIdOrContent: 'tab', // the id of html/table element
     };
 
-    this.config.type = type;
-    if (opt) {
-      this.config.options.jsPDF.orientation = opt;
-    }
-    this.exportAsService.save(this.config, fileName + '_' + new  Date().getTime());
+    this.exportAsService.save(this.config, fileName + '_' + new  Date().getTime()).subscribe(() => {
+
+      });
   }
   excelDownloadFileName(name: string) {
     this.uploadService.downloadFileName(name).pipe().subscribe((res: any) => {
