@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {AuthenticationService} from "../../auth-services/authentication.service";
 import {ErrorService} from "../../app-services/error.service";
 import {PaymentService} from "../../app-services/payment.service";
 import {RoleType} from "../../utils/model/role-type.enum";
-import {BsModalRef} from "ngx-bootstrap";
+import {BsModalRef, BsModalService, ModalOptions} from "ngx-bootstrap";
 import {MatSnackBar, MatSnackBarConfig} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";
 import {AccountManagementService} from "../../app-services/account-management-service";
@@ -29,6 +29,8 @@ export class AccountManagementComponent implements OnInit {
   user: any;
   roleTypes = RoleType;
   loading=false;
+  charge: any;
+  answer: string;
   makingSearchCall = false;
   searchCallQueue = false;
   pageParams: Params;
@@ -39,20 +41,24 @@ export class AccountManagementComponent implements OnInit {
   pageLoading = true;
   trxnData:any[];
   bsModalRef: BsModalRef;
+  modalOptions = new ModalOptions();
   snackBarConfig = new MatSnackBarConfig();
   error: string;
   success: string;
-
+  @ViewChild('confirmModal', {static: true}) confirmModal: any;
   constructor(private authService: AuthenticationService,
               private errorService: ErrorService,
               private exportAsService: ExportAsService,
               private dialog: MatDialog,
               private snackBar: MatSnackBar,
+              private modalService: BsModalService,
               private activatedRoute: ActivatedRoute,
               private downloadService: DownloadService,
               private accountManagement: AccountManagementService) {
     this.authenticationService = authService;
     this.snackBarConfig.duration = 3000;
+    this.modalOptions.backdrop = 'static';
+    this.modalOptions.keyboard = false;
   }
 
   ngOnInit() {
@@ -68,6 +74,7 @@ export class AccountManagementComponent implements OnInit {
         this.getAccountBalance();
         this.getCompanyTransaction();
         this.getCompanyUsers();
+        this.getCorporateCharge();
       }
     );
   }
@@ -84,7 +91,12 @@ export class AccountManagementComponent implements OnInit {
       this.balances=response;
     });
   }
-
+  getCorporateCharge()
+  {
+    this.accountManagement.getCorporateCharge().subscribe((response:any)=>{
+      this.charge=response.message;
+    });
+  }
   getCompanyUsers()
   {
     this.accountManagement.getCompanyUsers().subscribe((response:any)=>{
@@ -140,5 +152,31 @@ export class AccountManagementComponent implements OnInit {
     this.pageQueryModel.pageSize = pageEvent.pageSize;
     this.pageQueryModel.page = pageEvent.pageIndex;
     this.getCompanyTransaction();
+  }
+  openModal() {
+    this.bsModalRef = this.modalService.show(this.confirmModal, this.modalOptions);
+  }
+  sendWithdrawal(){
+    this.error = null;
+    this.success = null;
+    if (!this.answer) {
+      this.error = 'Please fill in the form correctly to continue.';
+      return;
+    }
+    this.loading=true;
+    this.accountManagement.withdraw({
+      amount: this.balances.currentBalance,
+      answer: this.answer.trim()
+    }).pipe()
+      .subscribe((response) => {
+        this.loading=false;
+
+      }, error => {
+        this.loading=false;
+        this.error = this.errorService.getErrorMessage(error);
+        this.snackBar.open(this.error, null, this.snackBarConfig);
+      });
+
+
   }
 }

@@ -132,7 +132,7 @@
                                   <hr/>
                                  <strong> Available Balance: ₦{{balances.availableBalance}}</strong>
 
-                                  <button mat-raised-button color="primary" style="float: right;" type="button">
+                                  <button mat-raised-button color="primary" (click)="openModal()" style="float: right;" type="button">
                                     <i class="fa fa-spinner fa-pulse" *ngIf="loading"></i>Make Withdrawal
                                   </button>
                                 </div>
@@ -207,4 +207,32 @@
     </div>
   </div>
 </div>
+<ng-template #confirmModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Confirm Withdrawal</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+  </div>
+  <div class="modal-body">
+    <div>
+        <div class="alert alert-danger" *ngIf="error">
+          {{error}}
+        </div>
+        <div class="alert alert-success" *ngIf="success">
+          {{success}}
+        </div>
+        <mat-form-field appearance="standard" matTooltip="Secret Answer">
+          <input matInput type="password" required [(ngModel)]="answer" placeholder="Enter Secret Answer">
+        </mat-form-field>
+        <div class="form-group">
+          <span style="color: red;">Please note that you will be charged ₦{{charge}} per withdrawal </span>
+        </div>
+        <div class="text-center">
+          <button mat-raised-button color="primary" type="submit" (click)="sendWithdrawal()">
+            <i class="fa fa-spinner fa-pulse" *ngIf="loading"></i>&nbsp;Submit</button>
+        </div>
+    </div>
+  </div>
+</ng-template>
 

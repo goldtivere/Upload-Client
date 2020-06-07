@@ -13,6 +13,14 @@ export class AccountManagementService {
   getCompanyUsers() {
     return this.httpClient.get(`${environment.apiBaseUrl}/acct/companyusers`);
   }
+  getCorporateCharge() {
+    return this.httpClient.get(`${environment.apiBaseUrl}/acct/chargeCorporate`);
+  }
+
+  withdraw(data) {
+    return this.httpClient.post<any>(`${environment.apiBaseUrl}/acct/withdraw`,data);
+  }
+
   getTrxnReport(param: Serializable) {
     const queryString = param.serialize();
     return this.httpClient.get(`${environment.apiBaseUrl}/acct/reports/download?${queryString}`);
