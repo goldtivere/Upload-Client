@@ -44,6 +44,13 @@ export class UserService {
     return this.httpClient.post<any>(`${environment.apiBaseUrl}/users/password`, data);
   }
 
+  getSecretStatus(){
+    return this.httpClient.get(`${environment.apiBaseUrl}/users/secretquestion`);
+  }
+setSecretQuestion(data)
+{
+  return this.httpClient.post<any>(`${environment.apiBaseUrl}/users/secretquestion/set`, data);
+}
   getAllHomeData() {
     return this.httpClient.get(`${environment.apiBaseUrl}/home`);
   }

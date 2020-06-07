@@ -52,7 +52,6 @@ export class AppComponent implements OnInit, OnDestroy {
   pageUtils = new Utils();
 
   ngOnInit(): void {
-
     this.subscriptions.push(this.router.events.subscribe((event: any) => {
       if (event instanceof RouteConfigLoadStart
         || event instanceof NavigationStart) {
@@ -138,6 +137,8 @@ export class AppComponent implements OnInit, OnDestroy {
         'one lowercase and one digit';
     }
   }
+
+
   ngOnDestroy() {
     this.subscriptions.forEach(it => it.unsubscribe());
   }

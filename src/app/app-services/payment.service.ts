@@ -11,7 +11,7 @@ export class PaymentService {
   constructor(private httpClient: HttpClient) { }
 
   confirmPaccount(paccount: string) {
-    return this.httpClient.get(`${environment.apiBaseUrl}/payer/confirmaccount/${paccount}`);
+    return this.httpClient.get(`${environment.apiBaseUrl}/pay/confirmaccount/${paccount}`);
   }
 
   initiateDebit(data) {

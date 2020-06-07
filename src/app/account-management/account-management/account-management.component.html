@@ -65,7 +65,7 @@
                                                   <td>{{trnx.trxnAmount}}</td>
                                                   <td>{{trnx.narration}}</td>
                                                   <td>{{trnx.createdBy}}</td>
-                                                  <td>{{trnx.dateCreated}}</td>
+                                                  <td>{{trnx.dateCreated | date:'medium'}}</td>
                                                 </tr>
                                               </ng-container>
                                               <ng-template #noData>
@@ -97,7 +97,7 @@
                                     <td>{{trnx.trxnAmount}}</td>
                                     <td>{{trnx.narration}}</td>
                                     <td>{{trnx.createdBy}}</td>
-                                    <td>{{trnx.dateCreated}}</td>
+                                    <td>{{trnx.dateCreated | date:'medium'}}</td>
                                   </tr>
                                 </ng-container>
                                 <ng-template #noData>
