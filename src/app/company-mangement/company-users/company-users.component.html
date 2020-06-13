@@ -76,6 +76,7 @@
                         <th scope="col">Role Type</th>
                         <th scope="col">Date Created</th>
                         <th scope="col" *ngIf="authenticationService.hasRole(roleTypes.ADMIN)">Actions</th>
+                        <th scope="col" *ngIf="authenticationService.hasRole(roleTypes.ADMIN)">Disable Users</th>
                       </tr>
                       </thead>
                       <tbody>
@@ -96,6 +97,10 @@
                                   class='fa fa-edit'></i>
                                 </button>
                               </span>
+                          </td>
+                          <td>
+                            <mat-slide-toggle [disabled]="!authenticationService.hasRole(roleTypes.ADMIN)" class="md-primary" [(ngModel)]="companyuser.userStatus"
+                                              (ngModelChange)="switchStatus(companyuser)">{{companyuser.userStatus ? 'Enabled' : 'Disabled'}}</mat-slide-toggle>
                           </td>
 
                           <!--<td *ngIf="authenticationService.hasRole(roleTypes.ADMIN)">-->

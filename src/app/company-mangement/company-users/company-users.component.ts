@@ -166,6 +166,16 @@ export class CompanyUsersComponent implements OnInit {
         this.snackBar.open(this.error, null, this.snackBarConfig);
       });
   }
+  switchStatus(companyUsers: any)
+  {
+    this.companyService.setUserStatus(companyUsers.id).pipe()
+      .subscribe((response) => {
+        this.snackBar.open(`User is ` + (companyUsers.userStatus ? 'Enabled' : 'Disabled'), null, this.snackBarConfig);
+      }, error => {
+        this.snackBar.open(this.errorService.getErrorMessage(error), null, this.snackBarConfig);
+        this.getCompanyUsers();
+      });
+  }
 }
 
 class CompanyEditUser {

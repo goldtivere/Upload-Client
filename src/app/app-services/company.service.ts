@@ -36,6 +36,10 @@ export class CompanyService {
     return this.httpClient.put<any>(`${environment.apiBaseUrl}/company/editcompanyuser/${id}`, data);
   }
 
+  setUserStatus(id:number)
+  {
+    return this.httpClient.put<any>(`${environment.apiBaseUrl}/company/setStatus/${id}`, {});
+  }
   getCompanyName(id: number) {
     return this.httpClient.get(`${environment.apiBaseUrl}/company/companyname/${id}`);
   }
