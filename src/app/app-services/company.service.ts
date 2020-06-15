@@ -27,13 +27,19 @@ export class CompanyService {
   createCompanyUser(id:number,data) {
     return this.httpClient.post<any>(`${environment.apiBaseUrl}/company/createCompanyuser/${id}`, data);
   }
-
+  createCorporateCompanyUser(data) {
+    return this.httpClient.post<any>(`${environment.apiBaseUrl}/company/createCorporateCompanyUser`, data);
+  }
   editCompany(id: number, data) {
     return this.httpClient.put<any>(`${environment.apiBaseUrl}/company/edit/${id}`, data);
   }
 
   editCompanyUser(id:number,data) {
     return this.httpClient.put<any>(`${environment.apiBaseUrl}/company/editcompanyuser/${id}`, data);
+  }
+
+  editCorporateCompanyUser(data) {
+    return this.httpClient.put<any>(`${environment.apiBaseUrl}/company/editcorporatecompanyuser`, data);
   }
 
   setUserStatus(id:number)
@@ -47,6 +53,16 @@ export class CompanyService {
   getCompanyUsers(id: number, param: Serializable) {
     const queryString = param.serialize();
     return this.httpClient.get(`${environment.apiBaseUrl}/company/getCompanyuser/${id}?${queryString}`);
+  }
+
+  getCorporateCompanyUsers(param: Serializable) {
+    const queryString = param.serialize();
+    return this.httpClient.get(`${environment.apiBaseUrl}/company/getCorporateCompanyuser?${queryString}`);
+  }
+
+  getCorporateCmpanyName()
+  {
+    return this.httpClient.get(`${environment.apiBaseUrl}/company/corporatename`);
   }
 
 }

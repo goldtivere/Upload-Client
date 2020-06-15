@@ -13,6 +13,7 @@ import {UserService} from "../app-services/user.service";
 import {ErrorService} from "../app-services/error.service";
 import {CompanyManagementComponent} from "./company-management/company-management.component";
 import { CompanyUsersComponent } from './company-users/company-users.component';
+import { CorporateUsersComponent } from './corporate-users/corporate-users.component';
 
 @NgModule({
   imports: [
@@ -26,7 +27,7 @@ import { CompanyUsersComponent } from './company-users/company-users.component';
     MatAutocompleteModule,
     MatSlideToggleModule
   ],
-  declarations: [CompanyManagementComponent, CompanyUsersComponent],
+  declarations: [CompanyManagementComponent, CompanyUsersComponent, CorporateUsersComponent],
   exports: [CompanyManagementComponent],
   providers: [AuthenticationService, CompanyService, TaskService, DownloadService, UserService, ErrorService],
   entryComponents: [CompanyManagementComponent]

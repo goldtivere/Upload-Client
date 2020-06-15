@@ -9,7 +9,7 @@
             class="fa fa-arrow-left"></i></a> Home</h2>
           <ul class="breadcrumb">
             <li class="breadcrumb-item"><a [routerLink]="['/home']"><i class="icon-home"></i></a></li>
-            <li class="breadcrumb-item active"><a>Company Details</a></li>
+            <li class="breadcrumb-item active"><a>Company Users</a></li>
           </ul>
         </div>
       </div>
@@ -21,12 +21,12 @@
         <div class="card">
           <div class="card-body p-10">
             <div class="border-bottom-b1">
-              <h3>{{companyName}} Details</h3>
+              <h3>{{companyName}} Users</h3>
             </div>
             <div>
               <div class="col-md-12 ">
                 <div style="background: white; padding: 16px" class="mat-elevation-z1 bg-filter">
-                  <div *ngIf="authenticationService.hasAnyRole([roleTypes.ADMIN])">
+                  <div *ngIf="authenticationService.hasAnyRole([roleTypes.CLIENT_ADMIN])">
                     <br style="clear: both;"/>
                     <hr style="height: 10px;">
                     <h5>Filter and order fields</h5>
@@ -56,7 +56,7 @@
               </div>
               <div class="col-md-12">
                 <div class="" style="text-align: end; float: right;"
-                     *ngIf="authenticationService.hasAnyRole([roleTypes.ADMIN])">
+                     *ngIf="authenticationService.hasAnyRole([roleTypes.CLIENT_ADMIN])">
                   <button (click)="openUserModal()" mat-raised-button color="primary" type="button">Create User
                   </button>
                 </div>
@@ -75,8 +75,8 @@
                         <th scope="col">Phone Number</th>
                         <th scope="col">Role Type</th>
                         <th scope="col">Date Created</th>
-                        <th scope="col" *ngIf="authenticationService.hasRole(roleTypes.ADMIN)">Actions</th>
-                        <th scope="col" *ngIf="authenticationService.hasRole(roleTypes.ADMIN)">Disable Users</th>
+                        <th scope="col" *ngIf="authenticationService.hasRole(roleTypes.CLIENT_ADMIN)">Actions</th>
+                        <th scope="col" *ngIf="authenticationService.hasRole(roleTypes.CLIENT_ADMIN)">Disable Users</th>
                       </tr>
                       </thead>
                       <tbody>
@@ -91,7 +91,7 @@
                           <td>{{companyuser.datecreated | date:'medium'}}</td>
                           <td><span>
                                 <button
-                                  *ngIf="authenticationService.hasAnyRole([roleTypes.ADMIN])"
+                                  *ngIf="authenticationService.hasAnyRole([roleTypes.CLIENT_ADMIN])"
                                   class="btn btn-sm u-btn-primary" (click)="editCompUserModal(companyuser)"
                                   matTooltip="Update"><i
                                   class='fa fa-edit'></i>
@@ -99,7 +99,7 @@
                               </span>
                           </td>
                           <td>
-                            <mat-slide-toggle [disabled]="!authenticationService.hasRole(roleTypes.ADMIN)" class="md-primary" [(ngModel)]="companyuser.userStatus"
+                            <mat-slide-toggle [disabled]="!authenticationService.hasRole(roleTypes.CLIENT_ADMIN)" class="md-primary" [(ngModel)]="companyuser.userStatus"
                                               (ngModelChange)="switchStatus(companyuser)">{{companyuser.userStatus ? 'Enabled' : 'Disabled'}}</mat-slide-toggle>
                           </td>
 
@@ -152,7 +152,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <div *ngIf="authenticationService.hasAnyRole([roleTypes.ADMIN])">
+    <div *ngIf="authenticationService.hasAnyRole([roleTypes.CLIENT_ADMIN])">
       <form [formGroup]="companyUserForm" (ngSubmit)="createCompanyUsers()">
 
         <div class="alert alert-danger" *ngIf="error">
@@ -178,7 +178,7 @@
             <mat-option [value]="''">
               Not Set
             </mat-option>
-            <mat-option *ngFor="let roles of selectOptions.roles" [value]="roles">
+            <mat-option *ngFor="let roles of selectOptions.rolesAdmin" [value]="roles">
               {{roles}}
             </mat-option>
           </mat-select>
@@ -201,7 +201,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <div *ngIf="authenticationService.hasAnyRole([roleTypes.ADMIN])">
+    <div *ngIf="authenticationService.hasAnyRole([roleTypes.CLIENT_ADMIN])">
       <form [formGroup]="editCompanyUserForm" (ngSubmit)="editCompanyUser()">
 
         <div class="alert alert-danger" *ngIf="error">
@@ -224,7 +224,7 @@
             <mat-option [value]="''">
               Not Set
             </mat-option>
-            <mat-option *ngFor="let roles of selectOptions.roles" [value]="roles">
+            <mat-option *ngFor="let roles of selectOptions.rolesAdmin" [value]="roles">
               {{roles}}
             </mat-option>
           </mat-select>

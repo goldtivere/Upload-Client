@@ -36,6 +36,7 @@ export class AccountManagementComponent implements OnInit {
   pageParams: Params;
   pageQueryModel: AccountManagementModel= new AccountManagementModel();
   balances:any;
+  amount: number;
   companyUsers: any;
   companyTransactions:PageData;
   pageLoading = true;
@@ -159,13 +160,19 @@ export class AccountManagementComponent implements OnInit {
   sendWithdrawal(){
     this.error = null;
     this.success = null;
-    if (!this.answer) {
+    if (!this.answer || !this.amount) {
       this.error = 'Please fill in the form correctly to continue.';
+      return;
+    }
+
+    if(this.amount*1 > this.balances.availableBalance*1)
+    {
+      this.error = 'Amount Exceeds Available Balance!!';
       return;
     }
     this.loading=true;
     this.accountManagement.withdraw({
-      amount: this.balances.currentBalance,
+      amount: this.amount,
       answer: this.answer.trim()
     }).pipe()
       .subscribe((response) => {

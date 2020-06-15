@@ -78,7 +78,7 @@
                                 <td>{{debitD.trxnAmount}}</td>
                                 <td>{{debitD.narration}}</td>
                                 <td>{{debitD.createdBy}}</td>
-                                <td>{{debitD.dateCreated}}</td>
+                                <td>{{debitD.dateCreated | date:'medium'}}</td>
                               </tr>
                             </ng-container>
                             <ng-template #noData>
