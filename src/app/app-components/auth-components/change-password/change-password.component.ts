@@ -69,7 +69,7 @@ export class ChangePasswordComponent implements OnInit {
     this.authenticationService.changePassword(newPassword)
       .subscribe((user: any) => {
         this.loading = false;
-        this.router.navigate(['/']);
+        this.router.navigate(['/dashboard']);
       }, (res: Response) => {
         this.error = res.statusText;
         this.loading = false;

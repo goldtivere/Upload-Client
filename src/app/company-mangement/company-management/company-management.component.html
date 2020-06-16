@@ -155,7 +155,7 @@
                           <td>{{company.bank.bankname}}</td>
                           <td>{{company.accountnumber}}</td>
                           <td>{{company.accountName}}</td>
-                          <td>{{company.datecreated}}</td>
+                          <td>{{company.datecreated | date:'medium'}}</td>
                           <td><span>
                                 <button
                                   *ngIf="authenticationService.hasAnyRole([roleTypes.ADMIN])"
