@@ -76,7 +76,7 @@ export class SignUpComponent implements OnInit {
       localStorage.setItem(HttpInterceptorService.TOKEN_NAME, response.token);
       this.authenticationService.fetch().subscribe(res => {
         this.loading = false;
-        this.router.navigate(['/home']);
+        this.router.navigate(['/dashboard']);
       }, err => {
         this.loading = false;
       });
