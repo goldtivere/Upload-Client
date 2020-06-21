@@ -13,6 +13,7 @@ import {PageData} from "../../utils/model/page-data";
 import {PageEvent} from "@angular/material/paginator";
 import {DownloadService} from "../../app-services/download-service";
 import {ExportAsConfig, ExportAsService} from "ngx-export-as";
+import {AccountReportModel} from "../../utils/model/account-report.model";
 
 @Component({
   selector: 'app-account-management',
@@ -35,6 +36,7 @@ export class AccountManagementComponent implements OnInit {
   searchCallQueue = false;
   pageParams: Params;
   pageQueryModel: AccountManagementModel= new AccountManagementModel();
+  pageQueryModelReport: AccountReportModel= new AccountReportModel();
   balances:any;
   amount: number;
   companyUsers: any;
@@ -128,6 +130,9 @@ export class AccountManagementComponent implements OnInit {
   dataChange(){
     this.getCompanyTransaction();
   }
+  dataChangeReport(){
+    this.getCompanyTransaction();
+  }
   getPaymentReport(type: any) {
     this.accountManagement.getTrxnReport(this.pageQueryModel).subscribe((response: any) => {
       this.trxnData = response;
@@ -165,9 +170,9 @@ export class AccountManagementComponent implements OnInit {
       return;
     }
 
-    if(this.amount*1 > this.balances.availableBalance*1)
+    if(this.charge*1+this.amount*1 > this.balances.availableBalance*1)
     {
-      this.error = 'Amount Exceeds Available Balance!!';
+      this.error = 'Amount Exceeds Available Balance plus charge!!';
       return;
     }
     this.loading=true;
@@ -177,7 +182,11 @@ export class AccountManagementComponent implements OnInit {
     }).pipe()
       .subscribe((response) => {
         this.loading=false;
-
+        this.snackBar.open(response.message, null, this.snackBarConfig);
+        this.bsModalRef.hide();
+        this.amount=null;
+        this.answer=null;
+        this.getAccountBalance();
       }, error => {
         this.loading=false;
         this.error = this.errorService.getErrorMessage(error);
