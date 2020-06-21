@@ -25,8 +25,17 @@ export class AccountManagementService {
     const queryString = param.serialize();
     return this.httpClient.get(`${environment.apiBaseUrl}/acct/reports/download?${queryString}`);
   }
+
+  getTrxnReportDebit(param: Serializable) {
+    const queryString = param.serialize();
+    return this.httpClient.get(`${environment.apiBaseUrl}/acct/reports/downloadDebit?${queryString}`);
+  }
   getCompanyTransactions(param: Serializable) {
     const queryString = param.serialize();
     return this.httpClient.get(`${environment.apiBaseUrl}/acct/companytransaction?${queryString}`);
+  }
+  getCompanyTransactionsDebit(param: Serializable) {
+    const queryString = param.serialize();
+    return this.httpClient.get(`${environment.apiBaseUrl}/acct/companytransactionDebit?${queryString}`);
   }
 }

@@ -27,6 +27,16 @@ export class DownloadService {
 
       });
   }
+  exportAsDebit(type: SupportedExtensions, fileName: string) {
+    this.config = {
+      type: type, // the type you want to download
+      elementIdOrContent: 'tabDebit', // the id of html/table element
+    };
+
+    this.exportAsService.save(this.config, fileName + '_' + new  Date().getTime()).subscribe(() => {
+
+    });
+  }
   excelDownloadFileName(name: string) {
     this.uploadService.downloadFileName(name).pipe().subscribe((res: any) => {
       const blob = new Blob([res], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;'});

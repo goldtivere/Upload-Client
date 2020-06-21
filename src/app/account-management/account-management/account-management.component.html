@@ -148,42 +148,72 @@
                             <div class="card ">
                               <div class="card-body widget widget-fullwidth widget-small" style="overflow-x:auto;">
                                 <mat-form-field>
-                                  <input matInput [matDatepicker]="picker1" placeholder="From"
+                                  <input matInput [matDatepicker]="picker2" placeholder="From"
                                          [(ngModel)]="pageQueryModelReport.datecreated" (ngModelChange)="dataChangeReport()">
-                                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                                  <mat-datepicker #picker1></mat-datepicker>
+                                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                  <mat-datepicker #picker2></mat-datepicker>
                                 </mat-form-field>
-
+                                <a [routerLink]="" (click)="getPaymentReportDebit('xlsx')" mat-raised-button color="primary"
+                                   type="button">Export As Ms-Excel</a>
                                 <table class="table table-striped table-bordered table-hover table-fw-widget">
                                   <thead>
                                   <tr>
                                     <th scope="col">(₦)Amount Debited</th>
                                     <th scope="col">Narration</th>
-                                    <th scope="col">Collected By</th>
+                                    <th scope="col">Charges</th>
                                     <th scope="col">Date Collected</th>
                                   </tr>
                                   </thead>
                                   <tbody>
-                                  <!--              <ng-container *ngIf="debitData?.totalElements; else noData">-->
-                                  <!--                <tr *ngFor="let debitD of debitData.content; let i=index">-->
-                                  <!--                  <td>{{debitD.trxnAmount}}</td>-->
-                                  <!--                  <td>{{debitD.narration}}</td>-->
-                                  <!--                  <td>{{debitD.createdBy}}</td>-->
-                                  <!--                  <td>{{debitD.dateCreated}}</td>-->
-                                  <!--                </tr>-->
-                                  <!--              </ng-container>-->
-                                  <!--              <ng-template #noData>-->
-                                  <!--                <tr *ngIf="canShowNoData()">-->
-                                  <!--                  <td colspan="12" class="text-center"> NO DATA</td>-->
-                                  <!--                </tr>-->
-                                  <!--              </ng-template>-->
+                                  <ng-container *ngIf="companyTransactionsDebit?.totalElements; else noData">
+                                    <tr *ngFor="let trnx of companyTransactionsDebit.content; let i=index">
+                                      <td>{{trnx.trxnAmount}}</td>
+                                      <td>{{trnx.narration}}</td>
+                                      <td>{{trnx.charges}}</td>
+                                      <td>{{trnx.dateCreated | date:'medium'}}</td>
+                                    </tr>
+                                  </ng-container>
+                                  <ng-template #noData>
+                                    <tr *ngIf="canShowNoDataDebit()">
+                                      <td colspan="12" class="text-center"> NO DATA</td>
+                                    </tr>
+                                  </ng-template>
                                   </tbody>
                                 </table>
                               </div>
 
-                              <!--                              <mat-paginator *ngIf="accounts?.length" #paginator class="mat-elevation-z1" [length]="accounts?.length" [pageSize]="10"-->
-                              <!--                                             [pageSizeOptions]="[5, 10, 25, 50, 100]"></mat-paginator>-->
-
+                              <mat-paginator *ngIf="canShowTableDebit()" #paginator class="mat-elevation-z1"
+                                             [length]="companyTransactionsDebit.totalElements" [pageSize]="10"
+                                             [pageSizeOptions]="[5, 10, 25, 50, 100]"
+                                             (page)="onPageChangeDebit($event)"></mat-paginator>
+                              <mat-progress-bar mode="indeterminate" *ngIf="pageLoading"></mat-progress-bar>
+                              <div class="card-body widget widget-fullwidth widget-small" style="display: none">
+                                <table class="table table-striped table-bordered table-hover table-fw-widget" id="tabDebit">
+                                  <thead>
+                                  <tr>
+                                    <th scope="col" title="(₦)Amount Debited">(₦)Amount Debited</th>
+                                    <th scope="col" title="Narration">Narration</th>
+                                    <th scope="col" title="Collected By">Charges</th>
+                                    <th scope="col" title="Date Collected">Date Collected</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                  <ng-container *ngIf="trxnDataDebit?.length; else noData">
+                                    <tr *ngFor="let trnx of trxnDataDebit; let i=index">
+                                      <td>{{trnx.trxnAmount}}</td>
+                                      <td>{{trnx.narration}}</td>
+                                      <td>{{trnx.charges}}</td>
+                                      <td>{{trnx.dateCreated | date:'medium'}}</td>
+                                    </tr>
+                                  </ng-container>
+                                  <ng-template #noData>
+                                    <tr *ngIf="!trxnDataDebit?.length">
+                                      <td colspan="15" class="text-center"> NO DATA</td>
+                                    </tr>
+                                  </ng-template>
+                                  </tbody>
+                                </table>
+                              </div>
                             </div>
                           </div>
                         </div>
