@@ -14,6 +14,10 @@ export class PaymentService {
     return this.httpClient.get(`${environment.apiBaseUrl}/pay/confirmaccount/${paccount}`);
   }
 
+  qrGenerate(paccount: string) {
+    return this.httpClient.get(`${environment.apiBaseUrl}/pay/${paccount}`,{responseType: "arraybuffer"});
+  }
+
   initiateDebit(data) {
     return this.httpClient.post<any>(`${environment.apiBaseUrl}/transaction/inititateDebit`,data);
   }

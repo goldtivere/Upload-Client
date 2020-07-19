@@ -22,15 +22,19 @@ export class PaymentManagementComponent implements OnInit {
 
   authenticationService: AuthenticationService;
   user: any;
+  qrValue: any;
   debitData: PageData;
   confirmPayerId: FormGroup;
   confirmPAccountForm: FormGroup;
+  qrForm: FormGroup;
   bsModalRef: BsModalRef;
+  showPortal= false;
   modalOptions = new ModalOptions();
   snackBarConfig = new MatSnackBarConfig();
   success: string;
-  pageLoading=false;
-  userIdAccount:string;
+  pageLoading = false;
+  userIdAccount: string;
+  private userId: number;
   error: string;
   value: string;
   pageParams: Params;
@@ -38,11 +42,14 @@ export class PaymentManagementComponent implements OnInit {
   roleTypes = RoleType;
   loading: boolean;
   isPaccountActive: boolean;
-  paccountDetails:any;
+  paccountDetails: any;
   makingSearchCall = false;
   searchCallQueue = false;
 
   @ViewChild('confirmPayAccountModal', {static: false}) confirmPayAccountModal: any;
+  @ViewChild('generateQRModal', {static: false}) generateQRModal: any;
+  @ViewChild('QRModal', {static: false}) QRModal: any;
+
   constructor(private fb: FormBuilder, private modalService: BsModalService,
               private activatedRoute: ActivatedRoute,
               private snackBar: MatSnackBar,
@@ -65,8 +72,14 @@ export class PaymentManagementComponent implements OnInit {
     this.confirmPAccountForm = fb.group({
       'paccount': ['', Validators.required]
     });
+    this.qrForm = fb.group({
+      'paccount': ['', Validators.required],
+      'amount': ['', Validators.required],
+      'description': ['', Validators.required]
+    });
 
   }
+
   getPageParamsAndTablesData() {
     this.activatedRoute.queryParams.subscribe(response => {
       this.pageParams = response;
@@ -75,6 +88,7 @@ export class PaymentManagementComponent implements OnInit {
       this.getDebit();
     });
   }
+
   getDebit() {
     if (this.makingSearchCall) {
       this.searchCallQueue = true;
@@ -91,77 +105,117 @@ export class PaymentManagementComponent implements OnInit {
       this.pageLoading = false;
     });
   }
+
   ngOnInit() {
     this.getSubscription();
     this.getPageParamsAndTablesData()
   }
+
   getSubscription() {
     this.authenticationService.getUser().subscribe(
       (user) => {
         this.user = user;
+        this.userId = user.id;
       }
     );
   }
-  makePayment()
-  {
+
+  makePayment() {
     this.error = null;
     this.success = null;
     if (this.loading || !this.confirmPayerId.valid) {
       this.error = 'Please fill in the form correctly to continue.';
       return;
     }
-    this.loading=true;
+    this.loading = true;
     const formValue = this.confirmPayerId.value;
-    formValue['userwalletId']=this.userIdAccount;
+    formValue['userwalletId'] = this.userIdAccount;
     this.paymentService.initiateDebit(formValue).pipe()
       .subscribe((response) => {
-        this.loading=false;
+        this.loading = false;
         this.snackBar.open(response.message, null, this.snackBarConfig);
         this.bsModalRef.hide();
-        this.isPaccountActive=false;
+        this.isPaccountActive = false;
         this.getDebit();
         this.getSubscription();
       }, error => {
-        this.loading=false;
+        this.loading = false;
         this.error = this.errorService.getErrorMessage(error);
         this.snackBar.open(this.error, null, this.snackBarConfig);
       });
 
   }
+
   canShowNoData() {
     return (!this.debitData || this.debitData.totalElements == 0) && !this.pageLoading;
   }
+
   canShowTable() {
     return (this.debitData && this.debitData.totalElements > 0) && !this.pageLoading;
   }
+
   onPageChange(pageEvent: PageEvent) {
     this.pageQueryModel.pageSize = pageEvent.pageSize;
     this.pageQueryModel.page = pageEvent.pageIndex;
     this.getDebit();
   }
-confirmPaccount()
-{
-  const formValue = this.confirmPAccountForm.value;
-  this.loading=true;
-  this.paymentService.confirmPaccount(formValue['paccount']).pipe().subscribe((response: any) => {
-    this.paccountDetails=response;
-    this.userIdAccount=formValue['paccount'];
+
+  confirmPaccount() {
+    const formValue = this.confirmPAccountForm.value;
+    this.loading = true;
+    this.paymentService.confirmPaccount(formValue['paccount']).pipe().subscribe((response: any) => {
+      this.paccountDetails = response;
+      this.userIdAccount = formValue['paccount'];
       this.snackBar.open(`PAccount Exists!`, null, this.snackBarConfig);
       this.bsModalRef.hide();
-      this.isPaccountActive=true;
+      this.isPaccountActive = true;
 
-    this.loading = false
-  }, error => {
+      this.loading = false
+    }, error => {
 
       this.error = this.errorService.getErrorMessage(error);
       this.snackBar.open(this.error, null, this.snackBarConfig);
 
-  });
-}
-  confirmPaymentModal()
-  {
+    });
+  }
+
+  confirmPaymentModal() {
     this.error = null;
     this.success = null;
     this.bsModalRef = this.modalService.show(this.confirmPayAccountModal, this.modalOptions);
+  }
+
+  generateQRModa() {
+    this.error = null;
+    this.success = null;
+
+    this.bsModalRef = this.modalService.show(this.generateQRModal, this.modalOptions);
+  }
+
+  generateQR() {
+    this.error= null;
+    this.success =null;
+    if (this.loading || !this.qrForm.valid) {
+      this.error = 'Please fill in the form correctly to continue.';
+      return;
+    }
+    const formValue = this.qrForm.value;
+    this.loading = true;
+    this.paymentService.qrGenerate(formValue['paccount']+'~'+ formValue['amount']+'~'+ formValue['description']+'~'+ this.userId).pipe().subscribe((response: any) => {
+        this.qrValue ='data:image/png;base64,' +this._arrayBufferToBase64(response);
+      this.bsModalRef.hide();
+      this.loading=false;
+      this.qrForm.reset();
+      this.showPortal = true;
+      });
+  }
+   _arrayBufferToBase64( buffer ) {
+    var binary = '';
+    var bytes = new Uint8Array( buffer );
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+      binary += String.fromCharCode( bytes[ i ] );
+    }
+    return window.btoa( binary );
   }
 }

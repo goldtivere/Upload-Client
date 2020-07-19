@@ -14,6 +14,8 @@ import {DownloadService} from "../../app-services/download-service";
 import {UserService} from "../../app-services/user.service";
 import {ErrorService} from "../../app-services/error.service";
 import {DashboardService} from "../../app-services/dashboard.service";
+import {WindowComponent} from "./payment-management/window.component";
+import {PortalModule} from '@angular/cdk/portal';
 
 
 
@@ -26,9 +28,10 @@ import {DashboardService} from "../../app-services/dashboard.service";
     ReactiveFormsModule,
     RouterModule,
     MatTabsModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    PortalModule
   ],
-  declarations: [PaymentManagementComponent],
+  declarations: [PaymentManagementComponent,WindowComponent],
   exports: [PaymentManagementComponent],
   providers: [AuthenticationService, DashboardService, TaskService, DownloadService, UserService, ErrorService],
   entryComponents: [PaymentManagementComponent]
