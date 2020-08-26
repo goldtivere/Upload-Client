@@ -265,7 +265,7 @@
         <span style="color: red;">Please note that you will be charged ₦{{charge}} per withdrawal </span>
       </div>
       <div class="text-center">
-        <button mat-raised-button color="primary" type="submit" (click)="sendWithdrawal()">
+        <button mat-raised-button color="primary" disabled="{{loading}}" type="submit" (click)="sendWithdrawal()">
           <i class="fa fa-spinner fa-pulse" *ngIf="loading"></i>&nbsp;Submit
         </button>
       </div>

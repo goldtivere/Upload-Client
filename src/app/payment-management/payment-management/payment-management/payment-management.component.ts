@@ -73,7 +73,6 @@ export class PaymentManagementComponent implements OnInit {
       'paccount': ['', Validators.required]
     });
     this.qrForm = fb.group({
-      'paccount': ['', Validators.required],
       'amount': ['', Validators.required],
       'description': ['', Validators.required]
     });
@@ -201,7 +200,8 @@ export class PaymentManagementComponent implements OnInit {
     }
     const formValue = this.qrForm.value;
     this.loading = true;
-    this.paymentService.qrGenerate(formValue['paccount']+'~'+ formValue['amount']+'~'+ formValue['description']+'~'+ this.userId).pipe().subscribe((response: any) => {
+    this.showPortal = false;
+    this.paymentService.qrGenerate(formValue['amount']+'~'+formValue['description']+'~'+ this.userId).pipe().subscribe((response: any) => {
         this.qrValue ='data:image/png;base64,' +this._arrayBufferToBase64(response);
       this.bsModalRef.hide();
       this.loading=false;
