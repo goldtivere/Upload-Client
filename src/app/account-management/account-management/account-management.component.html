@@ -65,7 +65,7 @@
                                 <tbody>
                                 <ng-container *ngIf="companyTransactions?.totalElements; else noData">
                                   <tr *ngFor="let trnx of companyTransactions.content; let i=index">
-                                    <td>{{trnx.trxnAmount}}</td>
+                                    <td>{{trnx.trxnAmount | number}}</td>
                                     <td>{{trnx.narration}}</td>
                                     <td>{{trnx.createdBy}}</td>
                                     <td>{{trnx.dateCreated | date:'medium'}}</td>
@@ -98,7 +98,7 @@
                                 <tbody>
                                 <ng-container *ngIf="trxnData?.length; else noData">
                                   <tr *ngFor="let trnx of trxnData; let i=index">
-                                    <td>{{trnx.trxnAmount}}</td>
+                                    <td>{{trnx.trxnAmount | number}}</td>
                                     <td>{{trnx.narration}}</td>
                                     <td>{{trnx.createdBy}}</td>
                                     <td>{{trnx.dateCreated | date:'medium'}}</td>
@@ -167,7 +167,7 @@
                                   <tbody>
                                   <ng-container *ngIf="companyTransactionsDebit?.totalElements; else noData">
                                     <tr *ngFor="let trnx of companyTransactionsDebit.content; let i=index">
-                                      <td>{{trnx.trxnAmount}}</td>
+                                      <td>{{trnx.trxnAmount | number}}</td>
                                       <td>{{trnx.narration}}</td>
                                       <td>{{trnx.charges}}</td>
                                       <td>{{trnx.dateCreated | date:'medium'}}</td>
@@ -200,7 +200,7 @@
                                   <tbody>
                                   <ng-container *ngIf="trxnDataDebit?.length; else noData">
                                     <tr *ngFor="let trnx of trxnDataDebit; let i=index">
-                                      <td>{{trnx.trxnAmount}}</td>
+                                      <td>{{trnx.trxnAmount | number}}</td>
                                       <td>{{trnx.narration}}</td>
                                       <td>{{trnx.charges}}</td>
                                       <td>{{trnx.dateCreated | date:'medium'}}</td>

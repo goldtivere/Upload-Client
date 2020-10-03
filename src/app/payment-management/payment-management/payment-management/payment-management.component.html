@@ -80,7 +80,7 @@
               <tbody>
                             <ng-container *ngIf="debitData?.totalElements; else noData">
                               <tr *ngFor="let debitD of debitData.content; let i=index">
-                                <td>{{debitD.trxnAmount}}</td>
+                                <td>{{debitD.trxnAmount | number}}</td>
                                 <td>{{debitD.narration}}</td>
                                 <td>{{debitD.createdBy}}</td>
                                 <td>{{debitD.dateCreated | date:'medium'}}</td>
