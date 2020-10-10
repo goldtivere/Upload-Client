@@ -3,7 +3,7 @@
   <nav class="navbar navbar-fixed-top" *ngIf="authenticationService.sessionUser && !isLoginPage()">
     <div class="container-fluid">
       <div class="navbar-btn">
-        <button type="button" class="btn-toggle-offcanvas"><i class="lnr lnr-menu fa fa-bars"></i></button>
+        <button type="button" onclick="openNav()" class="btn-toggle-offcanvas"><i class="lnr lnr-menu fa fa-bars"></i></button>
       </div>
 
       <div class="navbar-brand">
@@ -55,9 +55,9 @@
       </div>
     </div>
   </div>
-
+<div id="maindiv">
   <router-outlet></router-outlet>
-
+</div>
 </div>
 <ng-template #passwordModal>
   <div class="modal-header">
